@@ -31,3 +31,11 @@ Mô tả mức độ lệch của prediction. Đo lường khoảng cách giữa
 
 Khi chọn loss, cân nhắc cách bạn muốn mô hình xử lý các giá trị ngoại lệ.
 MSE làm cho mô hình dịch chuyển nhiều hơn về phía các giá trị ngoại lệ, trong khi MAE thì không. L2 gây ra mức phạt cao hơn nhiều đối với một giá trị ngoại lệ so với mất mát L1.
+
+MAE model:
+
+![MAE model](images/model-mae.png "MAE")
+
+MSE model:
+
+![MSE model](images/model-mse.png "MSE")
