@@ -48,3 +48,5 @@ Kỹ thuật toán học tìm kiếm lặp đi lặp lại các trọng số và
 + B2: Xác định hướng di chuyển của các trọng số và độ lệch để giảm thiểu loss
 + B3: Điều chỉnh giá trị trọng số và độ lệch một chút theo hướng giảm loss
 + B4: Quay lại bước một và lặp lại quy trình cho đến khi mô hình không thể giảm thiểu loss thêm nữa
+
+![gradient descent](images/gradient-descent.png "gradient descent")
