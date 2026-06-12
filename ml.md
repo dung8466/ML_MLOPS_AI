@@ -154,15 +154,33 @@ Mô hình **hội tụ** khi các vòng lặp tiếp theo không thể làm gi�
 
 | Thành phần | Công thức |
 |-----------|-----------|
-| Dự đoán | \( \hat{y} = w \cdot x + b \) |
-| MSE Loss | \( \frac{1}{M} \sum (\hat{y}_i - y_i)^2 \) |
-| Gradient theo w | \( \frac{2}{M} \sum (\hat{y}_i - y_i) \cdot x_i \) |
-| Gradient theo b | \( \frac{2}{M} \sum (\hat{y}_i - y_i) \) |
-| Cập nhật w | \( w = w - \eta \cdot \nabla w \) |
-| Cập nhật b | \( b = b - \eta \cdot \nabla b \) |
-
+| Dự đoán | $\hat{y} = w \cdot x + b$ |
+| MSE Loss | $\frac{1}{M} \sum_{i=1}^{M} (\hat{y}_i - y_i)^2$ |
+| Gradient theo w | $\frac{2}{M} \sum_{i=1}^{M} (\hat{y}_i - y_i) \cdot x_i$ |
+| Gradient theo b | $\frac{2}{M} \sum_{i=1}^{M} (\hat{y}_i - y_i)$ |
+| Cập nhật w | $w = w - \eta \cdot \nabla w$ |
+| Cập nhật b | $b = b - \eta \cdot \nabla b$ |
 ---
 
 **Lưu ý quan trọng:** Các công thức trên áp dụng cho **batch gradient descent** (tính gradient trên toàn bộ dữ liệu). Với SGD hoặc mini-batch, chỉ khác ở số lượng mẫu `M` dùng để tính.
 
+#### Model Convergence và Loss Curves (Đường cong hội tụ và đường cong loss)
+
++ Loss curve: biểu đồ thể hiện sự thay đổi của giá trị loss (trục y) theo số vòng lặp/iteration (trục x) trong quá trình huấn luyện mô hình.
+
++ Quá trình hội tụ (Convergence): Hội tụ là trạng thái mà mô hình đã tìm được bộ (weight, bias) tối ưu, khi đó:
+
+  - Loss giảm rất chậm hoặc hầu như không đổi qua các vòng lặp
+  - Gradient tiến dần về 0 (không còn hướng "dốc" để đi xuống)
+  - Các vòng lặp thêm không cải thiện đáng kể mô hình
+
+##### Các yếu tố ảnh hưởng đến hội tụ
+
+| Yếu tố |	Ảnh hưởng |
+| ------ | ---------- |
+| Learning rate quá lớn |	Loss dao động mạnh, có thể phân kỳ (không hội tụ) |
+| Learning rate quá nhỏ |	Hội tụ rất chậm, tốn nhiều vòng lặp |
+| Dữ liệu nhiễu |	Loss curve có thể gai góc, khó xác định hội tụ |
+| Kích thước dữ liệu lớn |	Cần nhiều vòng lặp hơn để hội tụ |
+---
 
