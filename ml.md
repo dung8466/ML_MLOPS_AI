@@ -10,7 +10,7 @@ y` = b + w1x1 + w2x2 + w3x3 + w4x4 + w5x5
  + b: bias -> tính toán từ traing
  + w: weight -> tính toán từ traing
  + x: feature value
-
+---
 ## Loss
 
 Mô tả mức độ lệch của prediction. Đo lường khoảng cách giữa các dự đoán của mô hình và label thực tế
@@ -27,6 +27,8 @@ Mô tả mức độ lệch của prediction. Đo lường khoảng cách giữa
 
 --> MAE và RMSE thường được dùng hơn so với L2 loss hoặc MSE trong một số trường hợp sử dụng vì chúng dễ hiểu hơn đối với con người, do chúng đo lường lỗi bằng cùng thang đo với giá trị dự đoán của mô hình.
 
+---
+
 ### Cách chọn Loss 
 
 Khi chọn loss, cân nhắc cách bạn muốn mô hình xử lý các giá trị ngoại lệ.
@@ -40,6 +42,7 @@ MSE model:
 
 ![MSE model](images/model-mse.png "MSE")
 
+---
 ## Gradient descent
 
 Kỹ thuật toán học tìm kiếm lặp đi lặp lại các trọng số và độ lệch sao cho tạo ra mô hình có loss thấp nhất. Gradient descent tìm ra trọng số và độ lệch tốt nhất bằng cách lặp lại quy trình sau đây với số lần lặp do người dùng xác định.
@@ -50,6 +53,8 @@ Kỹ thuật toán học tìm kiếm lặp đi lặp lại các trọng số và
 + B4: Quay lại bước một và lặp lại quy trình cho đến khi mô hình không thể giảm thiểu loss thêm nữa
 
 ![gradient descent](images/gradient-descent.png "gradient descent")
+
+---
 
 ### Công thức
 
@@ -65,6 +70,7 @@ Trong đó:
 - `b`: độ chệch (bias) - điểm chắn trục tung
 - `f_{w,b}(x)`: giá trị dự đoán (ví dụ: miles per gallon)
 
+---
 #### 2. Hàm mất mát - MSE (Mean Squared Error)
 
 Với tập dữ liệu có `M` mẫu:
@@ -78,6 +84,7 @@ Trong đó:
 - `y^{(i)}`: giá trị thực tế (label) của mẫu thứ i
 - `f_{w,b}(x^{(i)})`: giá trị dự đoán cho mẫu thứ i
 
+---
 #### 3. Gradient (Đạo hàm) của hàm MSE
 
 ##### 3.1. Đạo hàm theo trọng số (Weight derivative)
@@ -92,6 +99,8 @@ $$ \frac{\partial}{\partial w} \left( \frac{1}{M} \sum_{i=1}^{M} (f_{w,b}(x^{(i)
 **Ký hiệu rút gọn:**
 
 $$ \nabla w = \frac{\partial \text{MSE}}{\partial w} = \frac{2}{M} \sum_{i=1}^{M} (f_{w,b}(x^{(i)}) - y^{(i)}) \cdot x^{(i)} $$
+
+---
 
 ##### 3.2. Đạo hàm theo độ chệch (Bias derivative)
 
@@ -108,6 +117,8 @@ $$ \nabla b = \frac{\partial \text{MSE}}{\partial b} = \frac{2}{M} \sum_{i=1}^{M
 
 **Chú ý:** Không nhân với `x` vì đạo hàm của `b` đối với `b` là 1.
 
+---
+
 #### 4. Cập nhật tham số (Parameter Update)
 
 Sau khi tính được gradient, ta cập nhật trọng số và độ chệch bằng cách **đi ngược hướng gradient**:
@@ -119,6 +130,8 @@ $$ w_{\text{mới}} = w_{\text{cũ}} - (\text{learning rate} \times \nabla w) $$
 Hay viết đầy đủ:
 
 $$ w_{\text{mới}} = w_{\text{cũ}} - \eta \times \frac{2}{M} \sum_{i=1}^{M} (f_{w,b}(x^{(i)}) - y^{(i)}) \cdot x^{(i)} $$
+
+---
 
 ##### 4.2. Cập nhật độ chệch
 
@@ -132,6 +145,7 @@ Trong đó:
 - `η` (eta): **learning rate** (tốc độ học) - là một số dương nhỏ (ví dụ: 0.01)
 - Dấu **trừ** (`-`) thể hiện việc di chuyển **ngược hướng** gradient
 
+---
 
 #### 5. Các khái niệm quan trọng
 
@@ -150,6 +164,8 @@ Mô hình **hội tụ** khi các vòng lặp tiếp theo không thể làm gi�
 - Trục y: giá trị loss
 - Loss giảm nhanh ở đầu, chậm dần, và phẳng khi hội tụ
 
+---
+
 #### 6. Tóm tắt các công thức chính
 
 | Thành phần | Công thức |
@@ -164,7 +180,7 @@ Mô hình **hội tụ** khi các vòng lặp tiếp theo không thể làm gi�
 
 **Lưu ý quan trọng:** Các công thức trên áp dụng cho **batch gradient descent** (tính gradient trên toàn bộ dữ liệu). Với SGD hoặc mini-batch, chỉ khác ở số lượng mẫu `M` dùng để tính.
 
-#### Model Convergence và Loss Curves (Đường cong hội tụ và đường cong loss)
+### Model Convergence và Loss Curves (Đường cong hội tụ và đường cong loss)
 
 + Loss curve: biểu đồ thể hiện sự thay đổi của giá trị loss (trục y) theo số vòng lặp/iteration (trục x) trong quá trình huấn luyện mô hình.
 
@@ -174,7 +190,7 @@ Mô hình **hội tụ** khi các vòng lặp tiếp theo không thể làm gi�
   - Gradient tiến dần về 0 (không còn hướng "dốc" để đi xuống)
   - Các vòng lặp thêm không cải thiện đáng kể mô hình
 
-##### Các yếu tố ảnh hưởng đến hội tụ
+#### Các yếu tố ảnh hưởng đến hội tụ
 
 | Yếu tố |	Ảnh hưởng |
 | ------ | ---------- |
@@ -183,4 +199,10 @@ Mô hình **hội tụ** khi các vòng lặp tiếp theo không thể làm gi�
 | Dữ liệu nhiễu |	Loss curve có thể gai góc, khó xác định hội tụ |
 | Kích thước dữ liệu lớn |	Cần nhiều vòng lặp hơn để hội tụ |
 ---
+
+### Hàm lồi (Convex Functions) và "Ngọn núi một đỉnh"
+
+Linear regression có một tính chất đặc biệt: hàm loss của nó luôn là một hàm lồi (convex function).
+
+Hàm lồi chỉ có một điểm thấp nhất duy nhất, gọi là global minimum (điểm cực tiểu toàn cục).
 
