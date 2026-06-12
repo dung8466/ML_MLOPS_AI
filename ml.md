@@ -39,3 +39,12 @@ MAE model:
 MSE model:
 
 ![MSE model](images/model-mse.png "MSE")
+
+## Gradient descent
+
+Kỹ thuật toán học tìm kiếm lặp đi lặp lại các trọng số và độ lệch sao cho tạo ra mô hình có loss thấp nhất. Gradient descent tìm ra trọng số và độ lệch tốt nhất bằng cách lặp lại quy trình sau đây với số lần lặp do người dùng xác định.
+
++ B1: Tính toán loss với weight hiện tại và bias
++ B2: Xác định hướng di chuyển của các trọng số và độ lệch để giảm thiểu loss
++ B3: Điều chỉnh giá trị trọng số và độ lệch một chút theo hướng giảm loss
++ B4: Quay lại bước một và lặp lại quy trình cho đến khi mô hình không thể giảm thiểu loss thêm nữa
