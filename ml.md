@@ -24,7 +24,7 @@ Mô tả mức độ lệch của prediction. Đo lường khoảng cách giữa
 | Mean absolute error (MAE) | Trung bình của các \( L_1 \) loss trên một tập gồm \( N \) mẫu. | $$ \frac{1}{N} \sum \lvert \text{giá trị thực} - \text{giá trị dự đoán} \rvert $$ |
 | \( L_2 \) loss | Tổng bình phương chênh lệch giữa giá trị thực tế và giá trị dự đoán. | $$ \sum (\text{giá trị thực} - \text{giá trị dự đoán})^2 $$ |
 | Mean squared error (MSE) | Trung bình của các \( L_2 \) loss trên một tập gồm \( N \) mẫu. | $$ \frac{1}{N} \sum (\text{giá trị thực} - \text{giá trị dự đoán})^2 $$ |
-| Root mean squared error (RMSE) | Căn bậc hai của mean squared error (MSE). | $$ \sqrt{\frac{1}{N} \sum (\text{giá trị thực} - \text{giá trị dự đoán})^2} $$ |
+| Root mean squared error (RMSE) | Căn bậc hai của mean squared error (MSE). | $$ \sqrt{\frac{1}{N} \sum (\text{giá trị thực} - \text{giá trị dự đoán})^2 } $$ |
 
 --> MAE và RMSE thường được dùng hơn so với L2 loss hoặc MSE trong một số trường hợp sử dụng vì chúng dễ hiểu hơn đối với con người, do chúng đo lường lỗi bằng cùng thang đo với giá trị dự đoán của mô hình.
 
