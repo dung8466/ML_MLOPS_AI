@@ -206,3 +206,35 @@ Linear regression có một tính chất đặc biệt: hàm loss của nó luô
 
 Hàm lồi chỉ có một điểm thấp nhất duy nhất, gọi là global minimum (điểm cực tiểu toàn cục).
 
+---
+
+### Hyperparameters ( Siêu tham số )
+
+Các biến bạn điều khiển để tác động đến các khía cạnh khác nhau của quá trình huấn luyện.
+
+Ba loại hyperparameters phổ biến:
+
++ Learning rate (Tốc độ học)
++ Batch size (Kích thước lô / mẻ)
++ Epochs (Số chu kỳ / số thời đại)
+
+---
+
+#### Learning rate (Tốc độ học)
+
++ Là một số thực bạn tự đặt.
+
++ Quyết định mức độ thay đổi của weight và bias sau mỗi bước trong gradient descent.
+
++ Công thức: `Thay đổi = learning_rate × Gradient`
+
+
+##### Ảnh hưởng đến huấn luyện
+
+| Trường hợp |	Đặc điểm |	Hậu quả |
+| ---------- | -------- | -------- |
+| Learning rate quá NHỎ |	Mỗi bước cải thiện rất ít |	Cần rất nhiều vòng lặp mới có thể hội tụ |
+| Learning rate VỪA PHẢI | 	Giảm loss nhanh và ổn định |	Hội tụ nhanh chóng sau số vòng lặp hợp lý |
+| Learning rate quá LỚN |	Loss dao động mạnh hoặc tăng vọt |	KHÔNG BAO GIỜ HỘI TỤ, thậm chí phân kỳ |
+
+---
