@@ -224,7 +224,7 @@ Ba loại hyperparameters phổ biến:
 
 + Là một số thực bạn tự đặt.
 
-+ Quyết định mức độ thay đổi của weight và bias sau mỗi bước trong gradient descent.
++ Quyết định mức độ thay đổi của weight và bias sau mỗi bước trong gradient descent. Kích thước "bước nhảy" mỗi lần cập nhật weight/bias.
 
 + Công thức: `Thay đổi = learning_rate × Gradient`
 
@@ -236,5 +236,37 @@ Ba loại hyperparameters phổ biến:
 | Learning rate quá NHỎ |	Mỗi bước cải thiện rất ít |	Cần rất nhiều vòng lặp mới có thể hội tụ |
 | Learning rate VỪA PHẢI | 	Giảm loss nhanh và ổn định |	Hội tụ nhanh chóng sau số vòng lặp hợp lý |
 | Learning rate quá LỚN |	Loss dao động mạnh hoặc tăng vọt |	KHÔNG BAO GIỜ HỘI TỤ, thậm chí phân kỳ |
+
+---
+
+#### Batch size (Kích thước lô)
+
++ số lượng ví dụ dữ liệu (examples) được sử dụng trong một lần lặp (iteration) để tính toán gradient và cập nhật trọng số của mô hình.
+
+##### 3 chiến lược chính về Batch Size:
+
+- Full-batch iteration (Toàn bộ dữ liệu):
+
+   + Sử dụng toàn bộ tập dữ liệu để tính toán gradient cho mỗi lần cập nhật
+   + Gradient tính toán được là chính xác nhất cho toàn bộ tập dữ liệu
+   + Nếu tập dữ liệu khổng lồ (hàng tỷ ví dụ), việc tính toán sẽ cực kỳ chậm và tốn bộ nhớ (RAM/GPU)
+
+- Stochastic Gradient Descent (SGD):
+
+   + Batch size = 1. Cập nhật trọng số sau mỗi một ví dụ dữ liệu duy nhất
+   + Tốc độ tính toán cho mỗi bước rất nhanh
+   + Gradient bị "nhiễu" (nhảy loạn xạ), đường đi đến điểm tối ưu không ổn định
+ 
+- Mini-batch Gradient Descent (Phổ biến nhất)
+
+   + Batch size thường nằm trong khoảng từ 10 đến 1.000 ví dụ
+   + Cân bằng giữa tốc độ huấn luyện và độ ổn định
+ 
+##### Tác động của Batch Size đến quá trình học
+
+| Trường hợp | Ảnh hưởng |
+| ---------- | ---------- |
+| Batch size nhỏ | Tạo ra nhiều "nhiễu" hơn trong quá trình cập nhật. Đôi khi sự nhiễu này lại giúp mô hình thoát khỏi các "cực tiểu địa phương" (local minima) để tìm đến kết quả tốt hơn. |
+| Batch size lớn | Giúp gradient ổn định hơn, nhưng nếu quá lớn, mô hình có thể bị kẹt ở những điểm không tối ưu hoặc đòi hỏi tài nguyên phần cứng vượt quá khả năng của máy tính. |
 
 ---
