@@ -270,3 +270,57 @@ Ba loại hyperparameters phổ biến:
 | Batch size lớn | Giúp gradient ổn định hơn, nhưng nếu quá lớn, mô hình có thể bị kẹt ở những điểm không tối ưu hoặc đòi hỏi tài nguyên phần cứng vượt quá khả năng của máy tính. |
 
 ---
+
+#### Epoch (Kỷ nguyên)
+
+Đơn vị thời gian trong huấn luyện ML, đại diện cho một lần duy nhất mô hình đi qua toàn bộ tập dữ liệu huấn luyện (training set).
+
+Nếu bạn thiết lập Epochs = 10, mô hình của bạn sẽ "nhìn" thấy và học từ mỗi ví dụ trong tập dữ liệu tổng cộng 10 lần.
+
+Trong ML, mô hình không thể học hết các quy luật phức tạp chỉ sau một lần đọc dữ liệu. Việc lặp lại nhiều lần (nhiều Epochs) giúp mô hình:
+
+ + Cập nhật trọng số (w và b) nhiều lần hơn để giảm thiểu sai số (Loss)
+ + Tìm ra các mối quan hệ ẩn sâu trong dữ liệu mà lần đầu tiên có thể bỏ lỡ
+
+##### Cách xác định số lượng Epochs phù hợp
+
+Để biết khi nào nên dừng lại, các kỹ sư ML thường quan sát Loss Curve (Đồ thị mất mát):
+
+ + Giai đoạn đầu: Đường cong Loss giảm rất nhanh (mô hình đang học tốt)
+ + Giai đoạn ổn định (Convergence): Đường cong Loss bắt đầu đi ngang (mô hình đã hội tụ). Đây là lúc bạn nên dừng huấn luyện.
+ + Dấu hiệu Overfitting: Nếu Loss trên tập huấn luyện tiếp tục giảm nhưng Loss trên tập kiểm tra (validation set) bắt đầu tăng lên, đó là lúc bạn đã chạy quá nhiều Epochs.
+
+##### Mối quan hệ giữa Epoch, Batch Size và Iteration (Lần lặp)
+
++ Batch Size: Số lượng ví dụ dùng để tính toán trong 1 lần cập nhật trọng số.
+
++ Iteration (Lần lặp/Bước): Một lần cập nhật trọng số duy nhất.
+
++ Epoch: Hoàn thành việc duyệt qua toàn bộ dữ liệu.
+
+###### Công thức liên hệ giữa các Siêu tham số
+
+Công thức giúp bạn tính toán số lần cập nhật trọng số của mô hình:
+
+$$ \text{Total Iterations} = \text{Epochs} \times \left( \frac{\text{Total Examples}}{\text{Batch Size}} \right) $$
+
+*Trong đó:*
+*   **Total Iterations**: Tổng số lần mô hình cập nhật trọng số ($w$ và $b$).
+*   **Epochs**: Số lần duyệt qua toàn bộ tập dữ liệu.
+*   **Total Examples**: Tổng số ví dụ trong tập dữ liệu huấn luyện.
+*   **Batch Size**: Số lượng ví dụ trong một lô dữ liệu.
+
+
+###### Quy tắc cập nhật trọng số (Gradient Descent)
+Công thức để điều chỉnh các tham số sau mỗi bước lặp:
+
+$$ w_{new} = w_{old} - \eta \cdot \nabla L $$
+
+*Trong đó:*
+*   $w$: Trọng số cần cập nhật.
+*   $\eta$ (Eta): Tốc độ học (**Learning Rate**).
+*   $\nabla L$: Đạo hàm của hàm mất mát (**Gradient**) theo trọng số đó.
+
+---
+
+
