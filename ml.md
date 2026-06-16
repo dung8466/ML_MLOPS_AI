@@ -564,11 +564,16 @@ Tại sao không dùng mỗi **Accuracy (Độ chính xác tổng thể)**?
 Từ 4 giá trị TP, TN, FP, FN, ta tính được các chỉ số quan trọng khác:
 
 1.  **Accuracy (Độ chính xác):** Tỷ lệ dự đoán đúng trên tổng số ca.
-    $$ \frac{TP + TN}{TP + TN + FP + FN} $$
+
+$$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+
 2.  **Precision (Độ chính xác trên tập dự đoán dương):** Trong những ca mô hình bảo là "Có", có bao nhiêu ca thực sự là "Có"? (Tránh "Oan sai").
-    $$ \frac{TP}{TP + FP} $$
+
+$$\text{Precision} = \frac{TP}{TP + FP}$$
+
 3.  **Recall (Độ bao phủ/Độ nhạy):** Trong số những ca thực tế là "Có", mô hình bắt được bao nhiêu ca? (Tránh "Lọt lưới").
-    $$ \frac{TP}{TP + FN} $$
+
+$$\text{Recall} = \frac{TP}{TP + FN}$$
 
 ---
 
