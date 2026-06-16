@@ -851,3 +851,130 @@ Giới hạn các giá trị ngoại lai (outliers) tại một ngưỡng cố �
 3.  **Thống nhất:** Bạn phải dùng cùng một thông số chuẩn hóa (như Mean hay Std của tập Train) để áp dụng cho tập Test và dữ liệu thực tế sau này.
 
 Việc chuẩn hóa tốt có thể giúp mô hình của bạn chạy nhanh hơn gấp nhiều lần và đạt độ chính xác cao hơn!
+ 
+---
+
+## Binning (Bucketing) - Chia nhóm dữ liệu
+
+### Định nghĩa
+**Binning** là kỹ thuật biến đổi một đặc trưng số liên tục thành các đặc trưng phân loại (categorical) bằng cách chia dải giá trị của nó thành các khoảng rời rạc (gọi là các "thùng" hoặc "nhóm").
+
+*   *Ví dụ:* Thay vì để đặc trưng "Tuổi" chạy từ 0 đến 100, ta chia thành các nhóm: [0-10], [11-20], [21-30]...
+
+---
+
+### Tại sao cần Binning?
+Mô hình tuyến tính (Linear models) học theo quy tắc: nếu giá trị đặc trưng tăng, kết quả dự đoán sẽ tăng hoặc giảm tỉ lệ thuận ($y = wx$). Tuy nhiên, thực tế thường phức tạp hơn:
+
+*   **Xử lý quan hệ phi tuyến:** Có những đặc trưng mà mối quan hệ của nó với nhãn không phải là đường thẳng. 
+    *   *Ví dụ:* Giá nhà không giảm đều theo vĩ độ, mà có thể rất đắt ở một vài vĩ độ nhất định (trung tâm thành phố) và rẻ ở những vĩ độ khác.
+*   **Tăng tính linh hoạt:** Binning cho phép mô hình học một trọng số ($w$) riêng biệt cho mỗi khoảng giá trị, thay vì dùng chung một trọng số cho toàn bộ dải số.
+
+---
+
+### Cách thực hiện
+Sau khi chia thùng, mỗi khoảng giá trị sẽ được biến đổi bằng **One-hot encoding**. 
+
+*Ví dụ đặc trưng Vĩ độ:*
+*   Nếu vĩ độ nằm trong khoảng 34-35: Vector là `[1, 0, 0]`
+*   Nếu vĩ độ nằm trong khoảng 35-36: Vector là `[0, 1, 0]`
+*   Nếu vĩ độ nằm trong khoảng 36-37: Vector là `[0, 0, 1]`
+
+---
+
+### Các chiến lược chia thùng phổ biến
+1.  **Fixed Boundaries (Ranh giới cố định):** Bạn tự chọn các điểm cắt dựa trên kiến thức thực tế (ví dụ: chia độ tuổi theo các cột mốc pháp lý).
+2.  **Quantile Binning (Chia theo phân vị):** Chia sao cho số lượng ví dụ trong mỗi thùng là xấp xỉ bằng nhau. Điều này giúp tránh tình trạng có thùng quá nhiều dữ liệu, có thùng lại trống rỗng.
+
+---
+
+### Ghi nhớ cho ML:
+*   Binning biến một cột đặc trưng thành **nhiều cột** mới (tương ứng với số thùng).
+*   Đừng chia quá nhiều thùng: Nếu số lượng thùng quá lớn, mô hình dễ bị **Overfitting** vì mỗi thùng có quá ít dữ liệu để học.
+*   Binning là giải pháp mạnh mẽ để giúp các mô hình tuyến tính đơn giản học được các quy luật phức tạp.
+
+---
+
+## Data Scrubbing (Làm sạch dữ liệu)
+
+### Tầm quan trọng
+Dữ liệu trong thế giới thực thường bị lỗi, thiếu hoặc nhiễu. Scrubbing là quá trình lọc bỏ và sửa chữa các lỗi này để đảm bảo mô hình không học những quy luật sai trái.
+
+### Xử lý dữ liệu thiếu (Missing Values)
+Khi một đặc trưng bị trống, bạn có các lựa chọn sau:
+*   **Xóa bỏ (Omission):** Xóa toàn bộ dòng dữ liệu đó (chỉ nên làm khi số lượng dữ liệu thiếu rất ít).
+*   **Điền giá trị (Imputation):** 
+    *   Điền bằng giá trị trung bình (mean) hoặc trung vị (median) của cột đó.
+    *   Điền bằng một giá trị hằng số (ví dụ: 0 hoặc -1) và tạo thêm một cột phụ "is_missing" (Boolean) để báo cho mô hình biết giá trị này vốn dĩ bị thiếu.
+*   **Bỏ đặc trưng:** Nếu một cột bị thiếu quá nhiều (ví dụ > 50%), hãy cân nhắc bỏ luôn cột đó.
+
+### Xử lý giá trị ngoại lai (Outliers)
+Những giá trị quá lớn hoặc quá nhỏ bất thường có thể làm chệch hướng mô hình.
+*   **Nhận diện:** Sử dụng biểu đồ Histogram hoặc Scatter plot để thấy các điểm dữ liệu "đi lạc".
+*   **Xử lý:** 
+    *   Sử dụng **Clipping** để ép các giá trị này về một ngưỡng hợp lý.
+    *   Nếu đó là dữ liệu sai do lỗi nhập liệu (ví dụ: tuổi = 200), hãy xóa bỏ dòng đó.
+
+### Kiểm tra tính nhất quán (Consistency)
+Cần rà soát các vấn đề về logic trong dữ liệu:
+*   **Đơn vị:** Đảm bảo tất cả dữ liệu trong một cột dùng chung một đơn vị (ví dụ: tất cả là mét, không lẫn lộn với dặm).
+*   **Nhãn sai (Bad labels):** Kiểm tra xem có trường hợp nào cùng một loại dữ liệu nhưng bị gắn nhãn khác nhau không (ví dụ: "Spam" và "S.pam").
+*   **Dữ liệu trùng lặp (Duplicates):** Xóa các dòng dữ liệu giống hệt nhau vì chúng có thể làm mô hình quá coi trọng các ví dụ đó (gây Overfitting).
+
+### Dữ liệu không đáng tin cậy
+Hãy đặt câu hỏi cho các đặc trưng:
+*   Đặc trưng này có tỷ lệ giá trị 0 quá cao không? (Ví dụ: cột "Số lần mua hàng" mà 99% là 0 thì mô hình rất khó học).
+*   Đặc trưng này có thay đổi theo thời gian không? (Ví dụ: dữ liệu thu thập từ 10 năm trước có thể không còn đúng ở hiện tại).
+
+---
+
+### Ghi nhớ cho ML:
+*   Luôn dành thời gian **vẽ biểu đồ** để quan sát dữ liệu trước khi làm sạch.
+*   **Scrubbing không phải là làm một lần:** Bạn thường phải lặp đi lặp lại quá trình này khi phát hiện mô hình dự đoán sai ở những nhóm dữ liệu nhất định.
+*   Dữ liệu sạch quan trọng hơn thuật toán phức tạp. Một mô hình đơn giản chạy trên dữ liệu sạch luôn tốt hơn mô hình phức tạp chạy trên dữ liệu bẩn.
+
+---
+
+## Biến đổi đa thức (Polynomial Transforms)
+
+### Định nghĩa
+**Biến đổi đa thức** là kỹ thuật tạo ra các đặc trưng mới bằng cách nâng lũy thừa các đặc trưng hiện có (ví dụ: $x^2, x^3$) hoặc nhân các đặc trưng với nhau.
+
+### Tại sao cần Biến đổi đa thức?
+Các mô hình tuyến tính (Linear Regression) mặc định chỉ có thể học các đường thẳng. Tuy nhiên, dữ liệu thực tế thường có mối quan hệ **phi tuyến** (đường cong).
+*   **Vấn đề:** Một đường thẳng không thể khớp với các điểm dữ liệu phân bố theo hình parabol hoặc hình sóng.
+*   **Giải pháp:** Bằng cách thêm các đặc trưng đa thức, chúng ta cho phép mô hình tuyến tính "uốn cong" đường dự đoán để khớp với dữ liệu hơn.
+
+### Ví dụ về công thức
+Giả sử bạn có một đặc trưng gốc là $x$ (diện tích nhà):
+
+*   **Mô hình tuyến tính bậc 1:**
+    $$y = w_1x + b$$
+    *(Kết quả là một đường thẳng)*
+
+*   **Mô hình đa thức bậc 2:**
+    $$y = w_1x + w_2x^2 + b$$
+    *(Kết quả là một đường cong parabol)*
+
+*   **Mô hình đa thức bậc 3:**
+    $$y = w_1x + w_2x^2 + w_3x^3 + b$$
+    *(Kết quả là đường cong có thể uốn lượn nhiều hơn)*
+
+---
+
+### Đặc điểm quan trọng
+*   **Vẫn là mô hình tuyến tính:** Dù đường dự đoán là đường cong, nhưng về mặt toán học, mô hình vẫn là **tuyến tính đối với các trọng số ($w$)**. Điều này có nghĩa là bạn vẫn có thể dùng các thuật toán tối ưu đơn giản như Gradient Descent để huấn luyện.
+*   **Tương tác đặc trưng (Feature Crosses):** Ngoài việc nâng lũy thừa, bạn có thể nhân hai đặc trưng khác nhau (ví dụ: $x_1 \times x_2$). Đây cũng được coi là một dạng biến đổi đa thức giúp mô hình học được sự kết hợp giữa các yếu tố.
+
+### Nguy cơ Overfitting (Quá khớp)
+Đây là lưu ý quan trọng nhất khi dùng đa thức:
+*   **Bậc đa thức càng cao:** Mô hình càng linh hoạt và có thể khớp cực chính xác với mọi điểm dữ liệu trong tập huấn luyện.
+*   **Hậu quả:** Mô hình sẽ bắt đầu học cả những "nhiễu" (noise) trong dữ liệu thay vì học quy luật chung. Khi đưa dữ liệu mới vào, mô hình sẽ dự đoán rất sai.
+*   **Quy tắc:** Luôn bắt đầu với bậc thấp (bậc 2 hoặc 3) và sử dụng **Regularization** để kiểm soát các trọng số.
+
+---
+
+### Ghi nhớ cho ML:
+1.  Dùng **Polynomial Transforms** khi bạn thấy biểu đồ dữ liệu có dạng **đường cong**.
+2.  Nó biến mô hình tuyến tính thành một bộ phân loại/dự báo mạnh mẽ hơn mà không cần đổi sang các thuật toán phức tạp khác.
+3.  **Cảnh giác với bậc cao:** Đừng lạm dụng lũy thừa quá lớn vì sẽ gây lãng phí tài nguyên và dẫn đến Overfitting.
