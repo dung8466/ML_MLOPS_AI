@@ -470,3 +470,111 @@ Việc chọn $\lambda$ cực kỳ quan trọng để cân bằng giữa việc 
 2.  **Regularization** không phải là tùy chọn, nó là **bắt buộc** để mô hình không bị "học vẹt" dữ liệu.
 3.  Khi huấn luyện mô hình, nếu thấy trọng số ($w$) tăng quá lớn, hãy tăng giá trị **Lambda**.
 4.  Luôn theo dõi Loss trên cả tập Training và Validation để tìm ra điểm $\lambda$ tối ưu.
+
+---
+
+# Classification
+
+Nhiệm vụ dự đoán một ví dụ dữ liệu thuộc về lớp (class) hoặc danh mục nào trong một tập hợp cho trước.
+
+## Threshold ( Ngưỡng phân loại )
+
+Hồi quy Logistic trả về một xác suất (ví dụ: 0.7 hoặc 0.2). Tuy nhiên, để đưa ra quyết định cuối cùng (ví dụ: Email này là Spam hay Không), chúng ta cần một giá trị "điểm cắt", gọi là Ngưỡng phân loại (Classification Threshold).
+
+---
+
+### Quy tắc ánh xạ
+Giả sử chúng ta chọn một ngưỡng là $T$:
+*   Nếu Xác suất $y' \ge T \implies$ Phân loại là **Dương tính (Positive)**.
+*   Nếu Xác suất $y' < T \implies$ Phân loại là **Âm tính (Negative)**.
+
+*Ví dụ: Với ngưỡng $T = 0.5$:*
+*   $y' = 0.6 \implies$ Spam.
+*   $y' = 0.4 \implies$ Không phải Spam.
+
+---
+
+### Ngưỡng 0.5 có phải luôn là tốt nhất?
+**Câu trả lời là KHÔNG.** Mặc dù 0.5 là ngưỡng mặc định phổ biến, nhưng việc chọn ngưỡng phụ thuộc hoàn toàn vào **tác động thực tế** của các sai lầm trong bài toán của bạn.
+
+#### Trường hợp 1: Cần ngưỡng THẤP (ví dụ: 0.1)
+Khi việc **bỏ sót** một ca dương tính là cực kỳ nguy hiểm.
+*   *Ví dụ:* Chẩn đoán ung thư. Bạn thà dự đoán nhầm một người khỏe mạnh là có bệnh (để kiểm tra kỹ hơn) còn hơn là bỏ sót một người thực sự có bệnh.
+
+#### Trường hợp 2: Cần ngưỡng CAO (ví dụ: 0.9)
+Khi việc **kết luận sai** một ca dương tính gây ra hậu quả phiền toái lớn.
+*   *Ví dụ:* Chặn email spam. Người dùng sẽ rất bực mình nếu một email quan trọng của sếp bị tống vào hòm thư rác. Bạn chỉ nên đánh dấu là Spam khi mô hình cực kỳ chắc chắn (xác suất > 0.9).
+
+---
+
+### Tác động của việc thay đổi ngưỡng
+
+Việc điều chỉnh ngưỡng sẽ làm thay đổi các chỉ số đánh giá mô hình (Metrics):
+*   **Hạ thấp ngưỡng:** Bạn sẽ thu được nhiều kết quả Dương tính hơn $\implies$ Tăng khả năng bắt được mọi trường hợp đúng (**Recall** tăng), nhưng dễ bị nhầm (**Precision** giảm).
+*   **Nâng cao ngưỡng:** Bạn sẽ khắt khe hơn $\implies$ Những gì bạn kết luận là Dương tính sẽ có độ tin cậy cao hơn (**Precision** tăng), nhưng bạn sẽ bỏ lỡ nhiều trường hợp thực tế (**Recall** giảm).
+
+---
+
+### Tóm tắt:
+1.  **Thresholding** là bước chuyển đổi từ xác suất sang nhãn loại.
+2.  **Ngưỡng là một siêu tham số (Hyperparameter):** Bạn không học nó bằng Gradient Descent, mà bạn phải tự chọn dựa trên mục đích bài toán.
+3.  **Không bao giờ đánh giá mô hình chỉ bằng 1 ngưỡng duy nhất:** Bạn cần nhìn vào bức tranh toàn cảnh (như biểu đồ ROC hay Precision-Recall) để hiểu hiệu suất của mô hình ở các ngưỡng khác nhau.
+
+---
+
+## Confusion Matrix (Ma trận nhầm lẫn)
+
+**Confusion Matrix (Ma trận nhầm lẫn)** là một công cụ cực kỳ quan trọng để đánh giá hiệu suất của một mô hình phân loại. Nó cho bạn thấy không chỉ mô hình sai bao nhiêu, mà còn là **sai như thế nào**.
+
+Confusion Matrix là một bảng $2 \times 2$ (đối với phân loại nhị phân) so sánh giữa **Giá trị thực tế** và **Giá trị dự đoán**.
+
+### Cấu trúc ma trận
+
+| | Thực tế là Dương tính (Positive) | Thực tế là Âm tính (Negative) |
+| :--- | :---: | :---: |
+| **Dự đoán là Dương tính** | **TP** (True Positive) | **FP** (False Positive) |
+| **Dự đoán là Âm tính** | **FN** (False Negative) | **TN** (True Negative) |
+
+---
+
+### Giải thích 4 thành phần chính (Rất quan trọng)
+
+*   **TP (True Positive - Dương tính thật):** Mô hình dự đoán là "Có" và thực tế là "Có". (Ví dụ: Dự đoán có bệnh, thực tế có bệnh - **Đúng**)
+*   **TN (True Negative - Âm tính thật):** Mô hình dự đoán là "Không" và thực tế là "Không". (Ví dụ: Dự đoán không bệnh, thực tế khỏe mạnh - **Đúng**)
+*   **FP (False Positive - Dương tính giả):** Mô hình dự đoán là "Có" nhưng thực tế là "Không".
+    *   *Còn gọi là: Sai lầm loại I (Type I Error).*
+    *   *Hệ quả:* Gây ra báo động giả (Ví dụ: Người khỏe mạnh bị kết luận có bệnh - **"Oan sai"**).
+*   **FN (False Negative - Âm tính giả):** Mô hình dự đoán là "Không" nhưng thực tế là "Có".
+    *   *Còn gọi là: Sai lầm loại II (Type II Error).*
+    *   *Hệ quả:* Bỏ sót trường hợp quan trọng (Ví dụ: Người có bệnh bị kết luận là khỏe mạnh - **"Lọt lưới"**).
+
+---
+
+### Tại sao cần Confusion Matrix?
+Tại sao không dùng mỗi **Accuracy (Độ chính xác tổng thể)**? 
+
+**Ví dụ:** Bạn có 100 người, trong đó 99 người khỏe và 1 người bị ung thư.
+*   Nếu mô hình của bạn luôn dự đoán "Khỏe mạnh" cho tất cả mọi người, Accuracy sẽ là **99%**.
+*   Nhìn qua thì 99% là rất cao, nhưng thực tế mô hình này **vô dụng** vì nó bỏ sót ca ung thư duy nhất (FN = 1).
+*   **Confusion Matrix** sẽ vạch trần điều này bằng cách cho bạn thấy FN = 1 và TP = 0.
+
+---
+
+### Các chỉ số rút ra từ Ma trận nhầm lẫn
+Từ 4 giá trị TP, TN, FP, FN, ta tính được các chỉ số quan trọng khác:
+
+1.  **Accuracy (Độ chính xác):** Tỷ lệ dự đoán đúng trên tổng số ca.
+    $$ \frac{TP + TN}{TP + TN + FP + FN} $$
+2.  **Precision (Độ chính xác trên tập dự đoán dương):** Trong những ca mô hình bảo là "Có", có bao nhiêu ca thực sự là "Có"? (Tránh "Oan sai").
+    $$ \frac{TP}{TP + FP} $$
+3.  **Recall (Độ bao phủ/Độ nhạy):** Trong số những ca thực tế là "Có", mô hình bắt được bao nhiêu ca? (Tránh "Lọt lưới").
+    $$ \frac{TP}{TP + FN} $$
+
+---
+
+### Mẹo ghi nhớ:
+*   **True/False:** Nói về việc dự đoán đó **Đúng** hay **Sai**.
+*   **Positive/Negative:** Nói về **tên nhãn** mà mô hình đã chọn.
+*   Cứ thấy **True** là bạn đã làm đúng, thấy **False** là bạn đã làm sai.
+
+---
