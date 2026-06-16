@@ -823,6 +823,7 @@ Biến đổi dữ liệu sao cho giá trị trung bình (mean) bằng **0** và
 
 #### c. Log Scaling (Thang đo Logarit)
 Dùng hàm Log để "nén" các dữ liệu có phạm vi cực rộng hoặc bị lệch nặng (Power Law distribution).
+*   **Công thức:** $$x' = \log(x + 1)$$
 *   **Ví dụ:** Số lượng view của video (có cái 10 view, có cái 1 tỷ view).
 *   **Tác dụng:** Biến các giá trị cách biệt khổng lồ thành các khoảng cách nhỏ hơn, giúp mô hình dễ học hơn.
 
@@ -830,7 +831,7 @@ Dùng hàm Log để "nén" các dữ liệu có phạm vi cực rộng hoặc b
 Giới hạn các giá trị ngoại lai (outliers) tại một ngưỡng cố định.
 *   **Cách làm:** Nếu giá trị > ngưỡng Max, đặt nó bằng Max. Nếu < ngưỡng Min, đặt bằng Min.
 *   **Tác dụng:** Loại bỏ ảnh hưởng tiêu cực của các giá trị cực đoan mà không cần xóa bỏ cả dòng dữ liệu đó.
-
+*   **Công thức:** $$x' = \max(V_{min}, \min(x, V_{max}))$$
 ---
 
 ### Khi nào thì dùng kỹ thuật nào?
