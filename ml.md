@@ -567,11 +567,15 @@ Từ 4 giá trị TP, TN, FP, FN, ta tính được các chỉ số quan trọng
 
 $$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
 
-2.  **Precision (Độ chính xác trên tập dự đoán dương):** Trong những ca mô hình bảo là "Có", có bao nhiêu ca thực sự là "Có"? (Tránh "Oan sai").
+2. ** False positive rate (Tỷ lệ dương tính giả):** Tỷ lệ giữa tất cả các trường hợp thực tế là âm tính nhưng bị phân loại sai thành dương tính. Chỉ số này còn được gọi là xác suất báo động giả (probability of false alarm)
+
+$$\text{FPR} = \frac{FP}{FP + TN}$$
+
+3.  **Precision (Độ chính xác trên tập dự đoán dương):** Trong những ca mô hình bảo là "Có", có bao nhiêu ca thực sự là "Có"? (Tránh "Oan sai").
 
 $$\text{Precision} = \frac{TP}{TP + FP}$$
 
-3.  **Recall (Độ bao phủ/Độ nhạy):** Trong số những ca thực tế là "Có", mô hình bắt được bao nhiêu ca? (Tránh "Lọt lưới").
+4.  **Recall (Độ bao phủ/Độ nhạy):** Trong số những ca thực tế là "Có", mô hình bắt được bao nhiêu ca? (Tránh "Lọt lưới").
 
 $$\text{Recall} = \frac{TP}{TP + FN}$$
 
@@ -581,5 +585,22 @@ $$\text{Recall} = \frac{TP}{TP + FN}$$
 *   **True/False:** Nói về việc dự đoán đó **Đúng** hay **Sai**.
 *   **Positive/Negative:** Nói về **tên nhãn** mà mô hình đã chọn.
 *   Cứ thấy **True** là bạn đã làm đúng, thấy **False** là bạn đã làm sai.
+
+---
+
+Dưới đây là bản dịch và trình bày nội dung về **Lựa chọn chỉ số và sự đánh đổi (Tradeoffs)** sang tiếng Việt dưới dạng Markdown:
+
+---
+
+### Lựa chọn chỉ số và Sự đánh đổi
+
+Chỉ số (metric) mà bạn chọn ưu tiên khi đánh giá mô hình và chọn ngưỡng (threshold) phụ thuộc vào chi phí, lợi ích và rủi ro của từng bài toán cụ thể. 
+
+| Chỉ số | Hướng dẫn sử dụng |
+| :--- | :--- |
+| **Accuracy** (Độ chính xác) | - Sử dụng như một chỉ số sơ bộ để theo dõi tiến trình huấn luyện hoặc sự hội tụ của mô hình đối với các **tập dữ liệu cân bằng**.<br>- Đối với hiệu suất thực tế của mô hình, chỉ nên dùng khi kết hợp với các chỉ số khác.<br>- **Tránh sử dụng** cho các tập dữ liệu không cân bằng (imbalanced datasets). Hãy cân nhắc sử dụng chỉ số khác. |
+| **Recall** (Tỷ lệ dương tính thật) | - Sử dụng khi cái giá phải trả cho **Âm tính giả** (False Negatives - lọt lưới) lớn hơn so với Dương tính giả. |
+| **False positive rate** (Tỷ lệ dương tính giả) | - Sử dụng khi cái giá phải trả cho **Dương tính giả** (False Positives - báo động nhầm) lớn hơn so với Âm tính giả. |
+| **Precision** (Độ xác thực) | - Sử dụng khi việc các dự đoán Dương tính phải đảm bảo độ chính xác là **cực kỳ quan trọng**. |
 
 ---
