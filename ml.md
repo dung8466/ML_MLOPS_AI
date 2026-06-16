@@ -752,3 +752,101 @@ Bạn cần xác định rõ mục tiêu bài toán để chọn hàm kích ho�
 4.  Khi huấn luyện Softmax, hàm mất mát thường được dùng là **Multi-class Cross Entropy**.
 
 ---
+
+# Vector đặc trưng (Feature Vectors)
+
+### Định nghĩa
+
+**Vector đặc trưng** là một danh sách các con số đại diện cho các đặc trưng (features) của một ví dụ (example) duy nhất. Đây là dữ liệu đầu vào thực tế mà mô hình Machine Learning sẽ dùng để tính toán.
+
+*   *Ví dụ:* Để dự đoán giá nhà, vector đặc trưng có thể là: $[2000, 3, 2]$ (tương ứng với diện tích, số phòng ngủ, số phòng tắm).
+
+### Tại sao cần Vector đặc trưng?
+Mô hình ML thực chất là các phép toán (nhân ma trận, cộng số). Do đó, mọi dữ liệu dù là hình ảnh, văn bản hay âm thanh đều phải được chuyển đổi thành các con số trong một vector trước khi đưa vào huấn luyện.
+
+---
+
+### Các quy tắc thiết kế Vector đặc trưng tốt
+
+Để mô hình học hiệu quả, dữ liệu số trong vector cần tuân thủ các nguyên tắc sau:
+
+#### a. Tránh các "giá trị ma thuật" (Magic Values)
+*   **Sai:** Dùng các con số đặc biệt để đánh dấu dữ liệu thiếu. Ví dụ: đặt `score = -1` nếu học sinh bỏ thi. Mô hình sẽ hiểu lầm rằng -1 là một giá trị toán học thực tế và dùng nó để nhân/chia.
+*   **Đúng:** Sử dụng một đặc trưng phụ dạng Boolean (ví dụ: `is_missing_score = True`) hoặc dùng các kỹ thuật xử lý dữ liệu thiếu (như điền giá trị trung bình).
+
+#### b. Đơn vị phải rõ ràng và thống nhất
+*   Mô hình không biết đơn vị của con số là gì (mét, dặm hay giây). 
+*   Hãy đảm bảo mọi giá trị trong cùng một đặc trưng đều dùng chung một đơn vị đo lường.
+
+#### c. Làm sạch dữ liệu (Data Scrubbing)
+Trước khi đưa vào vector, cần xử lý các lỗi dữ liệu phổ biến:
+*   **Outliers (Giá trị ngoại lai):** Những con số cực lớn hoặc cực nhỏ bất thường có thể làm chệch hướng huấn luyện.
+*   **Dữ liệu rác:** Loại bỏ các ví dụ bị sai nhãn hoặc thiếu quá nhiều thông tin.
+
+---
+
+### Các bước biến đổi dữ liệu (Feature Transformation)
+Để các con số trong vector "thân thiện" hơn với mô hình, chúng ta thường áp dụng:
+
+1.  **Scaling (Thay đổi quy mô):** Đưa các đặc trưng về cùng một khoảng giá trị (ví dụ từ 0 đến 1 hoặc từ -1 đến 1). Điều này giúp Gradient Descent hội tụ nhanh hơn.
+2.  **Handling Outliers:** Sử dụng kỹ thuật như **Clipping** (giới hạn giá trị tối đa/tối thiểu) để giảm ảnh hưởng của các điểm dữ liệu cực đoan.
+3.  **Binning (Chia thùng):** Biến một giá trị số liên tục thành các khoảng (ví dụ: tuổi từ 10-20, 20-30) nếu mối quan hệ giữa đặc trưng và nhãn không phải là tuyến tính đơn giản.
+
+---
+
+Dưới đây là tóm tắt nội dung cốt lõi về **Chuẩn hóa dữ liệu (Normalization)** từ Google Machine Learning Crash Course. Đây là một trong những bước tiền xử lý quan trọng nhất đối với dữ liệu số.
+
+---
+
+## Chuẩn hóa dữ liệu (Normalization)
+
+### Tại sao cần chuẩn hóa?
+
+Khi các đặc trưng (features) có các phạm vi giá trị khác nhau (ví dụ: tuổi từ 0-100, nhưng thu nhập từ 0-1.000.000.000), mô hình sẽ gặp khó khăn:
+*   **Gradient Descent hội tụ chậm:** Thuật toán sẽ mất rất nhiều thời gian để "nhảy" về điểm tối ưu vì các trọng số có quy mô quá lệch nhau.
+*   **Lỗi mất mát (Loss) bị chi phối:** Các đặc trưng có giá trị lớn sẽ ảnh hưởng đến hàm mất mát nhiều hơn so với các đặc trưng có giá trị nhỏ, dù chúng có thể quan trọng như nhau.
+*   **Lỗi NaN:** Giá trị quá lớn có thể gây tràn bộ nhớ khi tính toán (exploding gradients).
+
+---
+
+### Các kỹ thuật chuẩn hóa phổ biến
+
+#### a. Linear Scaling (Thang đo tuyến tính)
+Đưa dữ liệu về một khoảng cố định, thường là **[0, 1]** hoặc **[-1, 1]**.
+*   **Công thức:** $x_{norm} = \frac{x - x_{min}}{x_{max} - x_{min}}$
+*   **Khi nào dùng:** Khi dữ liệu phân phối tương đối đều trong một khoảng và bạn biết rõ giá trị Min/Max.
+
+#### b. Z-score (Standardization - Chuẩn hóa điểm Z)
+Biến đổi dữ liệu sao cho giá trị trung bình (mean) bằng **0** và độ lệch chuẩn (std) bằng **1**.
+*   **Công thức:** $x' = \frac{x - \mu}{\sigma}$
+*   **Ưu điểm:** Giúp xử lý các giá trị ngoại lai (outliers) tốt hơn Linear Scaling vì nó không ép toàn bộ dữ liệu vào một khoảng hẹp nếu có một vài điểm quá xa.
+
+#### c. Log Scaling (Thang đo Logarit)
+Dùng hàm Log để "nén" các dữ liệu có phạm vi cực rộng hoặc bị lệch nặng (Power Law distribution).
+*   **Ví dụ:** Số lượng view của video (có cái 10 view, có cái 1 tỷ view).
+*   **Tác dụng:** Biến các giá trị cách biệt khổng lồ thành các khoảng cách nhỏ hơn, giúp mô hình dễ học hơn.
+
+#### d. Clipping (Cắt cụt)
+Giới hạn các giá trị ngoại lai (outliers) tại một ngưỡng cố định.
+*   **Cách làm:** Nếu giá trị > ngưỡng Max, đặt nó bằng Max. Nếu < ngưỡng Min, đặt bằng Min.
+*   **Tác dụng:** Loại bỏ ảnh hưởng tiêu cực của các giá trị cực đoan mà không cần xóa bỏ cả dòng dữ liệu đó.
+
+---
+
+### Khi nào thì dùng kỹ thuật nào?
+
+| Đặc điểm dữ liệu | Kỹ thuật khuyên dùng |
+| :--- | :--- |
+| Dữ liệu nằm trong khoảng hẹp, biết rõ Min/Max | **Linear Scaling** |
+| Dữ liệu có nhiều giá trị ngoại lai (outliers) | **Z-score** hoặc **Clipping** |
+| Dữ liệu bị lệch (ví dụ: thu nhập, dân số) | **Log Scaling** |
+| Dữ liệu có phân phối hình chuông (Normal distribution) | **Z-score** |
+
+---
+
+### Ghi nhớ cho ML:
+1.  **Mục tiêu cuối cùng:** Đưa mọi đặc trưng về cùng một "quy mô" (thường quanh khoảng -1 đến 1 hoặc 0 đến 1).
+2.  **Không có công thức vạn năng:** Bạn nên thử nghiệm nhiều cách chuẩn hóa khác nhau và quan sát biểu đồ Loss để chọn cách tốt nhất.
+3.  **Thống nhất:** Bạn phải dùng cùng một thông số chuẩn hóa (như Mean hay Std của tập Train) để áp dụng cho tập Test và dữ liệu thực tế sau này.
+
+Việc chuẩn hóa tốt có thể giúp mô hình của bạn chạy nhanh hơn gấp nhiều lần và đạt độ chính xác cao hơn!
