@@ -588,10 +588,6 @@ $$\text{Recall} = \frac{TP}{TP + FN}$$
 
 ---
 
-Dưới đây là bản dịch và trình bày nội dung về **Lựa chọn chỉ số và sự đánh đổi (Tradeoffs)** sang tiếng Việt dưới dạng Markdown:
-
----
-
 ### Lựa chọn chỉ số và Sự đánh đổi
 
 Chỉ số (metric) mà bạn chọn ưu tiên khi đánh giá mô hình và chọn ngưỡng (threshold) phụ thuộc vào chi phí, lợi ích và rủi ro của từng bài toán cụ thể. 
@@ -602,5 +598,50 @@ Chỉ số (metric) mà bạn chọn ưu tiên khi đánh giá mô hình và ch�
 | **Recall** (Tỷ lệ dương tính thật) | - Sử dụng khi cái giá phải trả cho **Âm tính giả** (False Negatives - lọt lưới) lớn hơn so với Dương tính giả. |
 | **False positive rate** (Tỷ lệ dương tính giả) | - Sử dụng khi cái giá phải trả cho **Dương tính giả** (False Positives - báo động nhầm) lớn hơn so với Âm tính giả. |
 | **Precision** (Độ xác thực) | - Sử dụng khi việc các dự đoán Dương tính phải đảm bảo độ chính xác là **cực kỳ quan trọng**. |
+
+---
+
+## Đường cong ROC và Chỉ số AUC
+
+### Đường cong ROC (Receiver Operating Characteristic)
+
+Đường cong ROC là một đồ thị thể hiện hiệu suất của mô hình phân loại ở **tất cả các ngưỡng phân loại khác nhau**.
+
+*   **Trục tung (Y):** **TPR** (True Positive Rate) — chính là **Recall**.
+    $$TPR = \frac{TP}{TP + FN}$$
+*   **Trục hoành (X):** **FPR** (False Positive Rate).
+    $$FPR = \frac{FP}{FP + TN}$$
+
+**Cách hoạt động:** Khi bạn hạ thấp ngưỡng phân loại, mô hình sẽ dự đoán nhiều mục là Dương tính hơn $\implies$ cả TP và FP đều tăng $\implies$ đường cong sẽ chạy từ điểm $(0,0)$ dần lên $(1,1)$.
+
+---
+
+### AUC (Area Under the ROC Curve)
+
+**AUC** là diện tích nằm dưới đường cong ROC. Chỉ số này cung cấp một giá trị duy nhất (từ 0 đến 1) để tóm tắt toàn bộ hiệu suất của mô hình.
+
+*   **Ý nghĩa xác suất:** AUC đại diện cho xác suất mà mô hình sẽ xếp hạng một ví dụ Dương tính ngẫu nhiên **cao hơn** một ví dụ Âm tính ngẫu nhiên.
+*   **Các giá trị AUC phổ biến:**
+    *   **AUC = 1.0:** Mô hình hoàn hảo (phân loại đúng 100%).
+    *   **AUC = 0.5:** Mô hình dự đoán ngẫu nhiên (giống như tung đồng xu, không có giá trị phân loại).
+    *   **AUC = 0.0:** Mô hình sai hoàn toàn (luôn dự đoán ngược lại).
+
+---
+
+### Tại sao AUC lại quan trọng?
+
+AUC có hai ưu điểm lớn khiến nó rất được ưa chuộng:
+
+1.  **Bất biến với ngưỡng (Threshold-invariant):** AUC đo lường chất lượng dự đoán của mô hình mà không cần quan tâm bạn chọn ngưỡng nào (0.5, 0.3 hay 0.9). Nó đánh giá khả năng **phân tách** các lớp của mô hình.
+2.  **Bất biến với quy mô (Scale-invariant):** AUC đo lường mức độ **xếp hạng** của các dự đoán thay vì giá trị tuyệt đối. (Ví dụ: Nếu mô hình dự đoán xác suất là 0.2 và 0.4, AUC vẫn cho kết quả tương tự như khi mô hình dự đoán 0.8 và 0.9, miễn là thứ tự xếp hạng không đổi).
+
+---
+
+### Những lưu ý (Caveats) khi dùng AUC
+
+Mặc dù rất mạnh mẽ, AUC vẫn có những hạn chế:
+
+*   **Không phản ánh chi phí sai lầm:** AUC coi trọng mọi lỗi sai như nhau. Trong thực tế, nếu cái giá của Dương tính giả (FP) quá đắt so với Âm tính giả (FN), AUC có thể không phản ánh đúng thực tế bạn cần.
+*   **Vấn đề về dữ liệu mất cân bằng:** Trong các bài toán có dữ liệu cực kỳ lệch (ví dụ: tỷ lệ bệnh hiếm 1/10.000), AUC đôi khi vẫn cho con số rất cao dù mô hình thực tế không hoạt động tốt trên lớp thiểu số.
 
 ---
