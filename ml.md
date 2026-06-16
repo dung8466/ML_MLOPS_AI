@@ -282,6 +282,8 @@ Trong ML, mô hình không thể học hết các quy luật phức tạp chỉ 
  + Cập nhật trọng số (w và b) nhiều lần hơn để giảm thiểu sai số (Loss)
  + Tìm ra các mối quan hệ ẩn sâu trong dữ liệu mà lần đầu tiên có thể bỏ lỡ
 
+---
+
 ##### Cách xác định số lượng Epochs phù hợp
 
 Để biết khi nào nên dừng lại, các kỹ sư ML thường quan sát Loss Curve (Đồ thị mất mát):
@@ -290,6 +292,8 @@ Trong ML, mô hình không thể học hết các quy luật phức tạp chỉ 
  + Giai đoạn ổn định (Convergence): Đường cong Loss bắt đầu đi ngang (mô hình đã hội tụ). Đây là lúc bạn nên dừng huấn luyện.
  + Dấu hiệu Overfitting: Nếu Loss trên tập huấn luyện tiếp tục giảm nhưng Loss trên tập kiểm tra (validation set) bắt đầu tăng lên, đó là lúc bạn đã chạy quá nhiều Epochs.
 
+---
+
 ##### Mối quan hệ giữa Epoch, Batch Size và Iteration (Lần lặp)
 
 + Batch Size: Số lượng ví dụ dùng để tính toán trong 1 lần cập nhật trọng số.
@@ -297,6 +301,8 @@ Trong ML, mô hình không thể học hết các quy luật phức tạp chỉ 
 + Iteration (Lần lặp/Bước): Một lần cập nhật trọng số duy nhất.
 
 + Epoch: Hoàn thành việc duyệt qua toàn bộ dữ liệu.
+
+---
 
 ###### Công thức liên hệ giữa các Siêu tham số
 
@@ -310,6 +316,7 @@ $$ \text{Total Iterations} = \text{Epochs} \times \left( \frac{\text{Total Examp
 *   **Total Examples**: Tổng số ví dụ trong tập dữ liệu huấn luyện.
 *   **Batch Size**: Số lượng ví dụ trong một lô dữ liệu.
 
+---
 
 ###### Quy tắc cập nhật trọng số (Gradient Descent)
 Công thức để điều chỉnh các tham số sau mỗi bước lặp:
@@ -323,4 +330,64 @@ $$ w_{new} = w_{old} - \eta \cdot \nabla L $$
 
 ---
 
+#  Logistic Regression
 
+Khác với Linear Regression (Hồi quy tuyến tính) dùng để dự đoán một giá trị số thực (như giá nhà), Logistic Regression (Hồi quy Logistic) được dùng để dự đoán xác suất của một sự kiện 
+
+Kết quả trả về luôn nằm trong khoảng: [0,1]
+
+## Công thức hàm Sigmoid
+
+Để ép các giá trị dự báo từ một đường thẳng ($-\infty$ đến $+\infty$) vào khoảng $[0, 1]$, chúng ta sử dụng hàm Sigmoid (còn gọi là hàm Logistic).
+
+$$ y = \frac{1}{1 + e^{-z}} $$
+
+**Trong đó:**
+*   $y$: Đầu ra (xác suất dự đoán).
+*   $e$: Hằng số Euler ($\approx 2.718$).
+*   $z$: Giá trị đầu ra từ mô hình tuyến tính, hay còn gọi là **Log-odds**:
+    $$ z = w \cdot x + b $$
+
+---
+
+### Các đặc điểm quan trọng của hàm Sigmoid
+
+Hiểu đồ thị và tính chất của hàm Sigmoid giúp bạn nắm bắt cách mô hình ra quyết định:
+
+*   **Đầu ra bị giới hạn:** Dù $z$ có lớn hay nhỏ bao nhiêu, $y$ luôn nằm trong khoảng $(0, 1)$.
+*   **Khi $z = 0$:** Giá trị $y = 0.5$. Đây là điểm trung tâm.
+*   **Khi $z \to \infty$:** Giá trị $y$ tiến rất nhanh về $1$.
+*   **Khi $z \to -\infty$:** Giá trị $y$ tiến rất nhanh về $0$.
+*   **Hình dạng:** Đồ thị có dạng đường cong chữ **S**.
+
+---
+
+## Cách chuyển từ Xác suất sang Phân loại (Classification)
+
+Sau khi có giá trị xác suất $y$ từ hàm Sigmoid, chúng ta cần một **Threshold** (Ngưỡng phân loại) để đưa ra kết luận cuối cùng (Ví dụ: 0 hoặc 1).
+
+**Quy tắc thông thường (Ngưỡng 0.5):**
+*   Nếu $y \ge 0.5 \implies$ Kết luận: **1** (Dương tính/Spam).
+*   Nếu $y < 0.5 \implies$ Kết luận: **0** (Âm tính/Không phải Spam).
+
+*Lưu ý: Ngưỡng này có thể thay đổi tùy vào mục đích bài toán (ví dụ: ngưỡng 0.7 hoặc 0.8 để khắt khe hơn).*
+
+---
+
+## Tại sao cần Sigmoid trong ML?
+
+1.  **Tính xác suất:** Nó không chỉ nói "Có" hay "Không", mà nó nói cho ta biết "Khả năng cao bao nhiêu phần trăm".
+2.  **Đạo hàm đẹp:** Trong toán học, hàm Sigmoid có đạo hàm rất thuận tiện cho việc tính toán **Gradient Descent** để cập nhật trọng số.
+3.  **Phi tuyến tính:** Nó giúp mô hình học được các mối quan hệ không phải là đường thẳng đơn giản.
+
+---
+
+### Tóm tắt công thức tổng quát
+
+Quy trình của Logistic Regression:
+
+$$ \hat{y} = \sigma(w^T x + b) = \frac{1}{1 + e^{-(w^T x + b)}} $$
+
+*   **Bước 1:** Tính giá trị tuyến tính $z = w^T x + b$.
+*   **Bước 2:** Đưa $z$ qua hàm Sigmoid $\sigma(z)$ để lấy xác suất $\hat{y}$.
+*   **Bước 3:** So sánh $\hat{y}$ với ngưỡng (Threshold) để phân loại.
