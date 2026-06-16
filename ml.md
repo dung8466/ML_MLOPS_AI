@@ -645,3 +645,110 @@ Mặc dù rất mạnh mẽ, AUC vẫn có những hạn chế:
 *   **Vấn đề về dữ liệu mất cân bằng:** Trong các bài toán có dữ liệu cực kỳ lệch (ví dụ: tỷ lệ bệnh hiếm 1/10.000), AUC đôi khi vẫn cho con số rất cao dù mô hình thực tế không hoạt động tốt trên lớp thiểu số.
 
 ---
+
+## Độ lệch dự đoán (Prediction Bias)
+
+### Định nghĩa
+
+**Prediction Bias** là một đại lượng đo lường khoảng cách giữa giá trị trung bình của các dự đoán từ mô hình so với giá trị trung bình thực tế của các nhãn trong tập dữ liệu.
+
+**Công thức:**
+$$\text{Prediction Bias} = \text{Average of Predictions} - \text{Average of Labels}$$
+
+*Lưu ý: Độ lệch này khác với khái niệm "Bias" ($b$) trong phương trình tuyến tính $y = wx + b$.*
+
+---
+
+### Ý nghĩa của các giá trị Bias
+*   **Bias = 0:** Một mô hình lý tưởng nên có độ lệch dự đoán bằng 0. Điều này có nghĩa là trung bình các dự đoán khớp hoàn toàn với trung bình các giá trị thực tế.
+*   **Bias dương (> 0):** Mô hình đang **dự đoán quá cao** (overestimating). Ví dụ: trung bình dự đoán là 0.7 nhưng thực tế chỉ là 0.5.
+*   **Bias âm (< 0):** Mô hình đang **dự đoán quá thấp** (underestimating).
+
+---
+
+### Cách chẩn đoán: Chia nhóm (Bucketing)
+Đừng chỉ nhìn vào độ lệch tổng thể của toàn bộ tập dữ liệu, vì các sai số có thể triệt tiêu lẫn nhau làm bạn lầm tưởng mô hình đã tốt. 
+
+**Kỹ thuật:** Chia dữ liệu thành các "nhóm" (buckets). Ví dụ:
+*   Chia theo các khoảng giá trị dự đoán (từ 0 đến 0.1, 0.1 đến 0.2...).
+*   Trong mỗi nhóm, tính toán Prediction Bias.
+*   **Biểu đồ hiệu chuẩn (Calibration Plot):** Nếu đường dự đoán khớp với đường 45 độ của các nhãn thực tế, mô hình đã được hiệu chuẩn tốt.
+
+---
+
+### Nguyên nhân gây ra Prediction Bias
+Nếu mô hình có độ lệch lớn, nguyên nhân thường do:
+*   **Tập đặc trưng (Features) chưa đầy đủ:** Có các yếu tố quan trọng ảnh hưởng đến kết quả nhưng chưa được đưa vào mô hình.
+*   **Dữ liệu nhiễu (Noisy data):** Tập huấn luyện chứa các ví dụ bị sai nhãn hoặc không đại diện cho thực tế.
+*   **Quy trình huấn luyện bị lỗi (Biased pipeline):** Cách lấy mẫu dữ liệu không công bằng.
+*   **Điều quy hóa (L2 Regularization) quá mạnh:** Khi bạn phạt các trọng số quá nặng, mô hình có xu hướng kéo các dự đoán về gần mức trung bình chung, dẫn đến phát sinh độ lệch.
+
+---
+
+### Cảnh báo quan trọng: Đừng "sửa ngọn"
+Khi phát hiện có Prediction Bias, nhiều người mắc sai lầm là thêm một **"lớp hiệu chuẩn" (calibration layer)** ở đầu ra để điều chỉnh kết quả dự đoán (ví dụ: cộng thêm một hằng số vào kết quả cuối).
+
+**Tại sao không nên làm vậy?**
+1.  Bạn đang sửa triệu chứng chứ không phải sửa nguyên nhân gốc rễ.
+2.  Mô hình sẽ trở nên lỗi thời nhanh chóng nếu dữ liệu đầu vào thay đổi.
+3.  Thay vào đó, hãy tập trung vào việc **cải thiện đặc trưng** hoặc **kiểm tra lại dữ liệu huấn luyện**.
+
+---
+
+Dưới đây là tóm tắt nội dung cốt lõi về **Phân loại đa lớp (Multi-class Classification)** từ Google Machine Learning Crash Course:
+
+---
+
+## Phân loại đa lớp (Multi-class Classification)
+
+Phân loại đa lớp là bài toán dự đoán một ví dụ thuộc về **một trong số nhiều lớp** (nhiều hơn 2 lớp).
+*   *Ví dụ:* Nhận diện chữ số viết tay (từ 0 đến 9), phân loại các loài động vật (chó, mèo, chim, cá).
+
+---
+
+### Hai phương pháp tiếp cận chính
+
+#### a. Một-đối-tất cả (One-vs.-All)
+Phương pháp này chia bài toán đa lớp thành nhiều bài toán phân loại nhị phân.
+*   **Cách làm:** Với $N$ lớp, bạn huấn luyện $N$ bộ phân loại nhị phân riêng biệt. 
+*   *Ví dụ:* Để phân loại Chó, Mèo, Chim:
+    1. Bộ phân loại 1: Chó hay không phải Chó?
+    2. Bộ phân loại 2: Mèo hay không phải Mèo?
+    3. Bộ phân loại 3: Chim hay không phải Chim?
+*   **Kết quả:** Khi dự đoán, ví dụ đó được đưa qua cả 3 bộ lọc, bộ nào có xác suất cao nhất sẽ được chọn.
+
+#### b. Softmax (Phổ biến nhất)
+Thay vì dùng nhiều mô hình nhị phân, chúng ta dùng một mô hình duy nhất có lớp đầu ra là **Softmax**. Softmax mở rộng ý tưởng của hàm Sigmoid từ nhị phân sang đa lớp.
+
+*   **Đặc điểm của Softmax:**
+    1. Trả về một **phân phối xác suất** cho tất cả các lớp.
+    2. Tổng xác suất của tất cả các lớp luôn **bằng 1.0**.
+    3. Công thức: $\sigma(z)_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$
+
+---
+
+### Phân biệt các loại Softmax
+*   **Full Softmax:** Tính toán xác suất cho tất cả các lớp có thể. Hiệu quả khi số lượng lớp ít (ví dụ: < 1000 lớp).
+*   **Candidate Sampling (Lấy mẫu ứng viên):** Chỉ tính toán xác suất cho nhãn đúng và một mẫu ngẫu nhiên các nhãn sai. Thường dùng khi số lượng lớp cực lớn (ví dụ: hàng triệu từ trong mô hình ngôn ngữ) để tiết kiệm tài nguyên.
+
+---
+
+### Single-label vs. Multi-label (Quan trọng)
+Bạn cần xác định rõ mục tiêu bài toán để chọn hàm kích hoạt (activation function) phù hợp:
+
+*   **Phân loại đơn nhãn (Single-label):** Một ví dụ chỉ thuộc về **duy nhất một lớp**.
+    *   *Ví dụ:* Một bức ảnh chỉ có thể là Chó **hoặc** Mèo.
+    *   **Giải pháp:** Dùng **Softmax**.
+*   **Phân loại đa nhãn (Multi-label):** Một ví dụ có thể thuộc về **nhiều lớp cùng lúc**.
+    *   *Ví dụ:* Một bức ảnh vừa có Chó, vừa có Mèo.
+    *   **Giải pháp:** KHÔNG dùng Softmax. Thay vào đó, dùng nhiều hàm **Sigmoid** riêng biệt cho mỗi lớp.
+
+---
+
+### Ghi nhớ cho ML:
+1.  Nếu tổng xác suất của các lựa chọn phải bằng 100% $\rightarrow$ Dùng **Softmax**.
+2.  Nếu các lựa chọn độc lập với nhau (một thứ có thể là nhiều thứ) $\rightarrow$ Dùng nhiều **Sigmoid**.
+3.  **One-vs.-All** tốn tài nguyên hơn Softmax vì phải chạy nhiều mô hình độc lập, nhưng dễ giải thích hơn trong một số trường hợp.
+4.  Khi huấn luyện Softmax, hàm mất mát thường được dùng là **Multi-class Cross Entropy**.
+
+---
