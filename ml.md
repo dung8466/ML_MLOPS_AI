@@ -567,7 +567,7 @@ Từ 4 giá trị TP, TN, FP, FN, ta tính được các chỉ số quan trọng
 
 $$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
 
-2. ** False positive rate (Tỷ lệ dương tính giả):** Tỷ lệ giữa tất cả các trường hợp thực tế là âm tính nhưng bị phân loại sai thành dương tính. Chỉ số này còn được gọi là xác suất báo động giả (probability of false alarm)
+2. **False positive rate (Tỷ lệ dương tính giả):** Tỷ lệ giữa tất cả các trường hợp thực tế là âm tính nhưng bị phân loại sai thành dương tính. Chỉ số này còn được gọi là xác suất báo động giả (probability of false alarm)
 
 $$\text{FPR} = \frac{FP}{FP + TN}$$
 
