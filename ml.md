@@ -338,15 +338,26 @@ Kết quả trả về luôn nằm trong khoảng: [0,1]
 
 ## Công thức hàm Sigmoid
 
-Để ép các giá trị dự báo từ một đường thẳng ($-\infty$ đến $+\infty$) vào khoảng $[0, 1]$, chúng ta sử dụng hàm Sigmoid (còn gọi là hàm Logistic).
+Phương trình dưới đây đại diện cho thành phần tuyến tính của một mô hình hồi quy logistic (logistic regression):
 
-$$ y = \frac{1}{1 + e^{-z}} $$
+$$z = b + w_1x_1 + w_2x_2 + ... + w_nx_n$$
 
-**Trong đó:**
-*   $y$: Đầu ra (xác suất dự đoán).
-*   $e$: Hằng số Euler ($\approx 2.718$).
-*   $z$: Giá trị đầu ra từ mô hình tuyến tính, hay còn gọi là **Log-odds**:
-    $$ z = w \cdot x + b $$
+Trong đó:
+
+*   **$z$** là đầu ra của phương trình tuyến tính, còn được gọi là **log-odds**.
+*   **$b$** là độ chệch (bias).
+*   Các giá trị **$w$** là các trọng số (weights) mà mô hình học được.
+*   Các giá trị **$x$** là các giá trị đặc trưng (feature values) cho một ví dụ cụ thể.
+
+Để nhận được dự đoán từ hồi quy logistic, giá trị $z$ sau đó được truyền qua hàm **sigmoid**, tạo ra một giá trị (một xác suất) nằm trong khoảng từ 0 đến 1:
+
+$$y' = \frac{1}{1 + e^{-z}}$$
+
+Trong đó:
+
+*   **$y'$** là đầu ra của mô hình hồi quy logistic (xác suất dự đoán).
+*   **$e$** là số Euler: một hằng số toán học $\approx 2.71828$.
+*   **$z$** là đầu ra tuyến tính (đã được tính toán ở phương trình trên).
 
 ---
 
