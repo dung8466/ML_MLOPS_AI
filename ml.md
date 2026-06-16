@@ -402,3 +402,64 @@ $$ \hat{y} = \sigma(w^T x + b) = \frac{1}{1 + e^{-(w^T x + b)}} $$
 *   **Bước 1:** Tính giá trị tuyến tính $z = w^T x + b$.
 *   **Bước 2:** Đưa $z$ qua hàm Sigmoid $\sigma(z)$ để lấy xác suất $\hat{y}$.
 *   **Bước 3:** So sánh $\hat{y}$ với ngưỡng (Threshold) để phân loại.
+
+---
+
+## Hàm mất mát (Loss function) và Điều quy hóa (Regularization)
+
+### Hàm mất mát: Log Loss
+
+Trong Linear Regression, chúng ta dùng *Squared Loss* (MSE). Tuy nhiên, trong Logistic Regression, chúng ta không dùng MSE vì nó sẽ khiến việc tối ưu hóa rất khó khăn. Thay vào đó, chúng ta sử dụng **Log Loss** (còn gọi là **Binary Cross-Entropy**).
+
+**Công thức Log Loss cho một ví dụ:**
+$$\text{Log Loss} = -[y \ln(y') + (1 - y) \ln(1 - y')]$$
+
+**Trong đó:**
+*   $y$: Nhãn thực tế ($0$ hoặc $1$).
+*   $y'$: Giá trị dự đoán từ hàm Sigmoid (xác suất từ $0$ đến $1$).
+
+**Ý nghĩa của Log Loss:**
+*   Nếu $y = 1$: Hàm mất mát chỉ còn $-\ln(y')$. Khi $y'$ tiến gần về $1$, Loss tiến về $0$. Khi $y'$ tiến gần về $0$, Loss tiến về vô cùng.
+*   Nếu $y = 0$: Hàm mất mát chỉ còn $-\ln(1 - y')$. Khi $y'$ tiến gần về $0$, Loss tiến về $0$.
+*   **Kết luận:** Log Loss phạt rất nặng những dự đoán "tự tin nhưng sai" (ví dụ: mô hình dự đoán xác suất là 0.99 nhưng nhãn thực tế là 0).
+
+---
+
+### Sự phức tạp của mô hình và Overfitting
+
+Trong Logistic Regression, nếu chúng ta không kiểm soát, các trọng số ($w$) có thể tiến tới vô cùng khi mô hình cố gắng khớp hoàn toàn (perfect fit) với mọi điểm dữ liệu trong tập huấn luyện. Điều này dẫn đến **Overfitting** (quá khớp).
+
+Để ngăn chặn điều này, chúng ta cần giảm độ phức tạp của mô hình thông qua **Regularization (Điều quy hóa)**.
+
+---
+
+### Điều quy hóa L2 (L2 Regularization)
+
+Đây là kỹ thuật phổ biến nhất để phạt các trọng số quá lớn. Thay vì chỉ tối ưu hóa để giảm thiểu Loss, chúng ta tối ưu hóa một hàm mới:
+
+$$\text{Minimize: } \text{Log Loss}(Data, Model) + \text{Complexity}(Model)$$
+
+Trong **L2 Regularization**, độ phức tạp được tính bằng tổng bình phương của các trọng số:
+$$\text{Complexity} = \lambda \sum w^2$$
+
+*   **$\lambda$ (Lambda):** Là một siêu tham số (hyperparameter) điều khiển mức độ phạt.
+*   **Mục tiêu:** Giữ cho các trọng số nhỏ lại, giúp mô hình ổn định hơn và khái quát hóa tốt hơn với dữ liệu mới.
+
+---
+
+### Tác động của siêu tham số Lambda ($\lambda$)
+Việc chọn $\lambda$ cực kỳ quan trọng để cân bằng giữa việc học dữ liệu và giữ mô hình đơn giản:
+
+| Giá trị $\lambda$ | Tác động | Kết quả |
+| :--- | :--- | :--- |
+| **Quá thấp ($\approx 0$)** | Ít hoặc không phạt trọng số. | Dễ bị **Overfitting**. |
+| **Vừa đủ** | Cân bằng giữa Loss và độ đơn giản. | Mô hình tốt nhất (Generalization). |
+| **Quá cao** | Trọng số bị ép về gần bằng 0. | Dễ bị **Underfitting** (Mô hình quá đơn giản). |
+
+---
+
+### Tổng hợp:
+1.  **Log Loss** là thước đo chuẩn xác cho các bài toán phân loại xác suất.
+2.  **Regularization** không phải là tùy chọn, nó là **bắt buộc** để mô hình không bị "học vẹt" dữ liệu.
+3.  Khi huấn luyện mô hình, nếu thấy trọng số ($w$) tăng quá lớn, hãy tăng giá trị **Lambda**.
+4.  Luôn theo dõi Loss trên cả tập Training và Validation để tìm ra điểm $\lambda$ tối ưu.
