@@ -411,12 +411,19 @@ $$ \hat{y} = \sigma(w^T x + b) = \frac{1}{1 + e^{-(w^T x + b)}} $$
 
 Trong Linear Regression, chúng ta dùng *Squared Loss* (MSE). Tuy nhiên, trong Logistic Regression, chúng ta không dùng MSE vì nó sẽ khiến việc tối ưu hóa rất khó khăn. Thay vào đó, chúng ta sử dụng **Log Loss** (còn gọi là **Binary Cross-Entropy**).
 
-**Công thức Log Loss cho một ví dụ:**
-$$\text{Log Loss} = -[y \ln(y') + (1 - y) \ln(1 - y')]$$
+### Công thức Log Loss
 
-**Trong đó:**
-*   $y$: Nhãn thực tế ($0$ hoặc $1$).
-*   $y'$: Giá trị dự đoán từ hàm Sigmoid (xác suất từ $0$ đến $1$).
+$$\text{Log Loss} = -\frac{1}{N} \sum_{i=1}^{N} [y_i \log(y'_i) + (1 - y_i) \log(1 - y'_i)]$$
+
+#### Các thành phần:
+
+*   **$N$**: Tổng số ví dụ có nhãn trong tập dữ liệu.
+*   **$i$**: Chỉ số đại diện cho một ví dụ cụ thể (ví dụ: $i=1, 2, 3...$).
+*   **$y_i$**: Nhãn thực tế (đáp án đúng) của ví dụ thứ $i$. Trong hồi quy logistic, giá trị này phải là **0** hoặc **1**.
+*   **$y'_i$**: Giá trị dự đoán của mô hình cho ví dụ thứ $i$. Đây là một xác suất nằm trong khoảng từ **0 đến 1**, được tính toán dựa trên tập đặc trưng $x_i$.
+*   **$\sum_{i=1}^{N}$**: Ký hiệu tổng, thực hiện tính toán biểu thức bên trong cho từng ví dụ rồi cộng tất cả lại.
+*   **$\log$**: Hàm logarit tự nhiên.
+*   **Dấu âm ($-$) ở đầu**: Được dùng để đảm bảo giá trị Loss cuối cùng là một số dương (vì log của một số < 1 luôn ra kết quả âm).
 
 **Ý nghĩa của Log Loss:**
 *   Nếu $y = 1$: Hàm mất mát chỉ còn $-\ln(y')$. Khi $y'$ tiến gần về $1$, Loss tiến về $0$. Khi $y'$ tiến gần về $0$, Loss tiến về vô cùng.
