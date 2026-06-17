@@ -110,7 +110,7 @@ plt.show()
 
 ---
 
-## 6. Những điểm cần lưu ý khi học
+## 6. Những điểm cần lưu ý
 
 1.  **Chuẩn hóa dữ liệu (Feature Scaling):** Gradient Descent sẽ hội tụ nhanh hơn nhiều nếu các đặc trưng có cùng quy mô (ví dụ: đưa về khoảng [0, 1]).
 2.  **Lựa chọn Learning Rate ($\alpha$):** Đây là bước quan trọng nhất. Cần thử các giá trị như 0.001, 0.01, 0.1 để xem giá trị nào làm hàm Loss giảm ổn định nhất.
@@ -118,4 +118,3 @@ plt.show()
 4.  **Giải pháp đóng (Normal Equation):** Ngoài Gradient Descent, còn có một phương pháp toán học để tính ngay ra $\theta$ tối ưu mà không cần lặp, nhưng nó chỉ hiệu quả với tập dữ liệu nhỏ.
 
 ---
-*Tóm tắt này giúp bạn hiểu từ lý thuyết toán học đến cách hiện thực hóa mã nguồn cho mô hình máy học cơ bản nhất.*
