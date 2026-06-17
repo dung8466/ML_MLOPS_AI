@@ -1,5 +1,3 @@
----
-
 # Sự đánh đổi Bias - Variance và Hồi quy Đa thức (Polynomial Regression)
 
 Mục tiêu của bài viết này là khám phá mối quan hệ giữa hai thuộc tính cạnh tranh nhau trong một mô hình học thống kê: **Bias (Độ chệch)** và **Variance (Phương sai)**.
