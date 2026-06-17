@@ -78,7 +78,7 @@ Việc chọn $\lambda$ là sự đánh đổi giữa **Bias** (Độ chệch) v
 
 | Đặc điểm | L2 Regularization (Ridge) | L1 Regularization (Lasso) |
 | :--- | :--- | :--- |
-| **Hình phạt** | Bình phương trọng số ($\theta^2$) | Trị tuyệt đối trọng số ($|\theta|$) |
+| **Hình phạt** | Bình phương trọng số ($\theta^2$) | Trị tuyệt đối trọng số ($\lvert \theta \rvert$) |
 | **Trọng số** | Giảm dần về gần 0 | Có thể bằng đúng 0 |
 | **Sử dụng khi** | Hầu hết các đặc trưng đều có ích | Chỉ có một ít đặc trưng là quan trọng |
 | **Ưu điểm** | Tính toán đạo hàm dễ dàng | Giúp loại bỏ đặc trưng dư thừa |
