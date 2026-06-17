@@ -94,6 +94,8 @@
    - [Đặc điểm quan trọng](#đặc-điểm-quan-trọng)
    - [Nguy cơ Overfitting (Quá khớp)](#nguy-cơ-overfitting-quá-khớp)
 
+---
+
 # Linear regression
 
 ```
@@ -1074,3 +1076,273 @@ Giả sử bạn có một đặc trưng gốc là $x$ (diện tích nhà):
 1.  Dùng **Polynomial Transforms** khi bạn thấy biểu đồ dữ liệu có dạng **đường cong**.
 2.  Nó biến mô hình tuyến tính thành một bộ phân loại/dự báo mạnh mẽ hơn mà không cần đổi sang các thuật toán phức tạp khác.
 3.  **Cảnh giác với bậc cao:** Đừng lạm dụng lũy thừa quá lớn vì sẽ gây lãng phí tài nguyên và dẫn đến Overfitting.
+
+---
+
+# One-Hot Encoding (OHE)
+
+### 1. Vấn đề: Dữ liệu phân loại (Categorical Data)
+Mô hình Machine Learning không thể thực hiện các phép toán trực tiếp trên dữ liệu dạng chữ (ví dụ: "Táo", "Cam", "Chuối"). Chúng ta cần chuyển chúng thành số.
+
+**Tại sao không dùng số nguyên (Integer Encoding)?**
+Nếu ta gán: Táo = 1, Cam = 2, Chuối = 3.
+*   Mô hình sẽ hiểu lầm rằng Chuối (3) có giá trị lớn hơn Táo (1).
+*   Mô hình sẽ nghĩ rằng trung bình của Táo (1) và Chuối (3) là Cam (2).
+*   **Hệ quả:** Điều này tạo ra một thứ tự giả định không có thực, làm sai lệch kết quả huấn luyện.
+
+---
+
+### 2. Giải pháp: One-Hot Encoding là gì?
+**One-Hot Encoding** biến mỗi giá trị phân loại thành một **vector số** gồm các số 0 và duy nhất một số 1.
+
+*   Độ dài của vector = Tổng số loại duy nhất (Vốn từ vựng - Vocabulary size).
+*   Số **1** nằm ở vị trí đại diện cho loại đó, tất cả các vị trí khác là **0**.
+
+**Ví dụ với danh mục trái cây {Táo, Cam, Chuối}:**
+*   **Táo:** `[1, 0, 0]`
+*   **Cam:** `[0, 1, 0]`
+*   **Chuối:** `[0, 0, 1]`
+
+---
+
+### 3. Các khái niệm liên quan
+
+#### a. Vốn từ vựng (Vocabulary)
+Là tập hợp tất cả các giá trị duy nhất xuất hiện trong tập dữ liệu huấn luyện. Nếu bạn có 100 loại sản phẩm khác nhau, vector của bạn sẽ có độ dài 100.
+
+#### b. Thùng chứa giá trị lạ (OOV Bucket - Out of Vocabulary)
+Điều gì xảy ra nếu khi sử dụng thực tế, mô hình gặp một giá trị mới không có trong tập huấn luyện (ví dụ: "Xoài")?
+*   Hệ thống thường dành riêng một vị trí trong vector gọi là **OOV bucket** (hoặc "Unknown").
+*   Tất cả các giá trị lạ sẽ được mã hóa vào vị trí này để tránh làm lỗi mô hình.
+
+#### c. Vector thưa (Sparse Representation)
+Khi vốn từ vựng quá lớn (ví dụ: 1 triệu từ), vector One-hot sẽ chứa cực kỳ nhiều số 0 (gọi là vector thưa). Để tiết kiệm bộ nhớ, người ta thường lưu trữ dưới dạng danh sách các vị trí có số 1 thay vì lưu toàn bộ dãy số 0.
+
+---
+
+### Ghi nhớ cho ML:
+*   Dùng **One-Hot Encoding** cho dữ liệu phân loại không có thứ tự (Ví dụ: Màu sắc, quốc gia, loại sản phẩm).
+*   Nếu dữ liệu **có thứ tự** (Ví dụ: Thấp, Trung bình, Cao), bạn có thể cân nhắc dùng số nguyên (1, 2, 3).
+*   OHE khiến số lượng đặc trưng tăng lên rất nhanh (mỗi loại trở thành một cột mới), hãy cẩn thận với tài nguyên máy tính nếu có quá nhiều loại.
+
+---
+
+# Các vấn đề với Dữ liệu phân loại
+
+Việc áp dụng One-Hot Encoding trên lý thuyết thì đơn giản, nhưng trong thực tế bạn sẽ gặp 4 vấn đề lớn sau:
+
+### 1. Vấn đề về bộ nhớ (Large Vocabulary)
+Khi vốn từ vựng (Vocabulary) quá lớn (ví dụ: danh sách địa chỉ nhà, từ điển ngôn ngữ với hàng triệu từ), vector One-hot sẽ trở nên cực kỳ khổng lồ và chứa hầu hết là số 0.
+*   **Hậu quả:** Gây lãng phí bộ nhớ và làm chậm quá trình tính toán.
+*   **Giải pháp:** Sử dụng **Sparse Representation (Biểu diễn thưa)**. Thay vì lưu một dãy `[0, 0, 0, 1, 0...]`, hệ thống chỉ lưu vị trí của số 1 (ví dụ: "vị trí số 3"). Trong TensorFlow, điều này được xử lý bằng `tf.sparse`.
+
+### 2. Giá trị lạ và hiếm (Out-of-Vocabulary - OOV)
+Dữ liệu thực tế thường không hoàn hảo như dữ liệu huấn luyện:
+*   **Giá trị mới:** Khi chạy thực tế, xuất hiện một loại mới chưa từng có trong tập huấn luyện (ví dụ: một hãng xe mới ra đời).
+*   **Lỗi chính tả:** "Hà Nội" bị viết nhầm thành "Ha Noi".
+*   **Giải pháp:** Sử dụng **OOV Bucket (Thùng chứa giá trị lạ)**. Mọi giá trị không nằm trong danh sách đã biết sẽ được gộp chung vào một cột "Unknown".
+
+### 3. Vấn đề về tính nhất quán (Data Integrity)
+Dữ liệu phân loại rất dễ bị "nhiễu" do cách nhập liệu:
+*   **Viết hoa/viết thường:** "Apple", "apple", "APPLE" bị coi là 3 loại khác nhau.
+*   **Từ đồng nghĩa:** "TP.HCM" và "Sài Gòn".
+*   **Giải pháp:** Cần thực hiện **Data Scrubbing** (làm sạch dữ liệu) như chuyển hết về chữ thường, xóa khoảng trắng thừa hoặc dùng bảng quy đổi để thống nhất dữ liệu trước khi mã hóa.
+
+### 4. Kỹ thuật "Băm đặc trưng" (Feature Hashing)
+Đây là một giải pháp thay thế cho One-Hot Encoding khi bạn không muốn quản lý một danh sách từ vựng khổng lồ.
+*   **Cách làm:** Sử dụng hàm băm (hash function) để biến mỗi giá trị thành một con số trong một khoảng cố định (ví dụ: từ 0 đến 999).
+*   **Ưu điểm:** Không cần lưu bảng từ vựng, tiết kiệm bộ nhớ, xử lý được cả các giá trị mới (OOV).
+*   **Nhược điểm:** Xảy ra hiện tượng **Collision (Xung đột)** — hai giá trị khác nhau bị băm vào cùng một số. Tuy nhiên, trong ML, một vài xung đột nhỏ thường không ảnh hưởng quá nghiêm trọng đến độ chính xác tổng thể.
+
+---
+
+### Ghi nhớ cho ML:
+1.  **Dữ liệu phân loại luôn cần được làm sạch** (viết thường, chuẩn hóa) trước khi mã hóa.
+2.  Nếu số lượng danh mục (categories) lên tới hàng triệu, hãy nghĩ ngay đến **Sparse Tensors** hoặc **Feature Hashing**.
+3.  Luôn chuẩn bị một **OOV Bucket** để mô hình không bị "đứng hình" khi gặp dữ liệu lạ.
+4.  Đối với các danh mục có quá ít dữ liệu (hiếm), hãy cân nhắc gộp chúng lại vào nhóm "Khác" để mô hình không bị nhiễu.
+
+---
+
+# Kết hợp đặc trưng (Feature Crosses)
+
+### 1. Định nghĩa
+**Feature Cross** là một đặc trưng tổng hợp (synthetic feature) được tạo ra bằng cách **nhân hai hoặc nhiều đặc trưng** với nhau. Việc kết hợp này cho phép mô hình học được mối quan hệ tương tác giữa các yếu tố thay vì chỉ học từng yếu tố riêng lẻ.
+
+**Công thức đơn giản:**
+$$x_3 = x_1 \times x_2$$
+
+---
+
+### 2. Tại sao cần Feature Crosses?
+Các mô hình tuyến tính thuần túy ($y = w_1x_1 + w_2x_2 + b$) chỉ có thể học trọng số cho từng đặc trưng độc lập. Tuy nhiên, trong thực tế, giá trị của một đặc trưng thường phụ thuộc vào một đặc trưng khác.
+
+*   **Ví dụ về vị trí địa lý:**
+    *   Giả sử bạn muốn dự báo giá nhà dựa trên Vĩ độ ($x_1$) và Kinh độ ($x_2$).
+    *   Một mô hình tuyến tính chỉ có thể nói: "Càng về phía Bắc thì nhà càng đắt" hoặc "Càng về phía Đông thì nhà càng đắt".
+    *   Nhưng thực tế, nhà chỉ đắt tại một **tọa độ cụ thể** (ví dụ: trung tâm thành phố). Mô hình cần biết sự kết hợp giữa $x_1$ và $x_2$ mới dự báo đúng được.
+
+---
+
+### 3. Feature Crosses với Dữ liệu phân loại (One-Hot)
+Đây là nơi Feature Crosses phát huy sức mạnh lớn nhất. Khi bạn kết hợp các vector One-Hot, bạn tạo ra một vector mới đại diện cho tất cả các tổ hợp có thể xảy ra.
+
+**Ví dụ:** Kết hợp loại hình nhà và thành phố.
+*   **Đặc trưng 1:** `[Chung cư, Nhà phố]`
+*   **Đặc trưng 2:** `[Hà Nội, TP.HCM]`
+*   **Feature Cross (1 x 2):** Sẽ tạo ra 4 khả năng:
+    1.  `Chung cư ở Hà Nội`
+    2.  `Chung cư ở TP.HCM`
+    3.  `Nhà phố ở Hà Nội`
+    4.  `Nhà phố ở TP.HCM`
+
+Mô hình sẽ học một trọng số ($w$) riêng biệt cho từng tổ hợp này.
+
+---
+
+### 4. Lợi ích chính
+1.  **Học quan hệ phi tuyến:** Giúp mô hình tuyến tính học được các quy luật phức tạp mà không cần dùng đến các mô hình phi tuyến sâu (như Neural Networks).
+2.  **Hiệu quả với dữ liệu khổng lồ:** Với các tập dữ liệu cực lớn (hàng tỷ ví dụ), các mô hình tuyến tính kết hợp Feature Crosses thường chạy nhanh và hiệu quả hơn nhiều so với Neural Networks.
+
+---
+
+### 5. Lưu ý về sự bùng nổ đặc trưng (Feature Explosion)
+*   **Vấn đề:** Nếu bạn kết hợp hai đặc trưng có vốn từ vựng lớn (ví dụ: 1.000 loại sản phẩm $\times$ 1.000 thành phố), bạn sẽ tạo ra **1.000.000 đặc trưng mới**.
+*   **Hậu quả:** Gây tốn bộ nhớ, làm chậm quá trình huấn luyện và dễ dẫn đến **Overfitting** (do mỗi tổ hợp có quá ít dữ liệu để học).
+*   **Giải pháp:** Chỉ kết hợp các đặc trưng mà bạn tin rằng chúng có mối liên hệ logic với nhau, hoặc sử dụng **L1 Regularization** để loại bỏ các kết hợp không quan trọng.
+
+---
+
+### Ghi nhớ cho ML:
+*   **Feature Cross = Phép nhân.**
+*   Dùng Feature Cross khi bạn muốn mô hình hiểu rằng: "Yếu tố A chỉ có ý nghĩa khi đi kèm với yếu tố B".
+*   Đây là cách "thông minh hóa" mô hình tuyến tính đơn giản.
+*   Luôn cẩn thận với số lượng đặc trưng tăng vọt sau khi kết hợp.
+
+---
+
+# Đặc điểm dữ liệu và Overfitting
+
+Trong Machine Learning, Overfitting (quá khớp) xảy ra khi mô hình học cả **"nhiễu" (noise)** thay vì chỉ học **"tín hiệu" (signal)**. Nội dung này tập trung vào việc nhận diện các loại nhiễu trong dữ liệu khiến mô hình bị "lạc lối".
+
+### 1. Nhiễu trong Nhãn (Noisy Labels)
+Đây là trường hợp các ví dụ trong tập dữ liệu bị gắn nhãn sai lệch so với thực tế.
+*   **Nguyên nhân:** Do lỗi nhập liệu của con người, lỗi hệ thống thu thập, hoặc sự không nhất quán trong định nghĩa nhãn (ví dụ: hai người đánh giá một email là spam theo tiêu chuẩn khác nhau).
+*   **Hậu quả đối với mô hình:** Khi mô hình quá phức tạp, nó sẽ cố gắng tìm ra một quy luật toán học cực kỳ rắc rối để "giải thích" tại sao ví dụ bị sai nhãn đó lại có kết quả như vậy. Thay vì phớt lờ sai số, mô hình lại học nó như một quy luật đúng.
+
+### 2. Nhiễu trong Đặc trưng (Noisy Features)
+Các thông tin đầu vào (features) không chính xác hoặc chứa các giá trị bị lỗi.
+*   **Ví dụ:** Một cảm biến nhiệt độ bị hỏng thỉnh thoảng gửi về giá trị 1000°C trong khi thực tế là 25°C.
+*   **Hậu quả:** Mô hình có thể lầm tưởng rằng những giá trị cực đoan này là dấu hiệu quan trọng để dự báo nhãn. Điều này làm hỏng khả năng khái quát hóa vì mô hình đang dựa vào những dữ liệu sai lệch.
+
+### 3. Các đặc trưng hiếm (Rare Features)
+Đây là một trong những nguyên nhân "tàng hình" gây Overfitting mạnh nhất.
+*   **Khái niệm:** Là những đặc trưng chỉ xuất hiện trong một số lượng rất nhỏ ví dụ (ví dụ: chỉ xuất hiện 1-2 lần trong 1 triệu dòng dữ liệu).
+*   **Sự nguy hiểm:** Khi một đặc trưng cực kỳ hiếm tình cờ đi kèm với một nhãn cụ thể, mô hình sẽ gán cho nó một **trọng số ($w$) rất lớn**.
+    *   *Ví dụ thực tế:* Trong dữ liệu mua sắm, có duy nhất một khách hàng mua "Mũ màu tím" và người này tình cờ là một "VIP". Mô hình có thể học quy luật sai lầm: "Bất cứ ai mua mũ màu tím đều là khách hàng VIP". 
+*   **Kết luận:** Mô hình đang "ghi nhớ" (memorizing) dữ liệu thay vì "học" (learning).
+
+### 4. Kết hợp đặc trưng chứa các tổ hợp hiếm (Rare Feature Crosses)
+Tương tự như đặc trưng hiếm, nhưng xảy ra khi ta nhân các đặc trưng với nhau (Feature Crosses).
+*   **Vấn đề:** Khi bạn kết hợp nhiều đặc trưng, bạn tạo ra các tổ hợp cực kỳ chi tiết. Càng chi tiết thì số lượng ví dụ có tổ hợp đó càng ít.
+*   **Hậu quả:** Bạn càng tạo ra nhiều Feature Crosses, mô hình càng có nhiều cơ hội để "học vẹt" các trường hợp cá biệt. Điều này biến mô hình thành một "cuốn từ điển" ghi nhớ từng dòng dữ liệu thay vì là một công cụ dự báo thông minh.
+
+---
+
+### 5. Triết lý Ockham’s Razor (Nguyên lý tối giản)
+Nội dung nhấn mạnh một nguyên lý quan trọng trong ML để đối phó với Overfitting:
+> *"Giữa các lý thuyết có cùng khả năng giải thích một sự việc, lý thuyết nào đơn giản nhất thường là lý thuyết đúng."*
+
+**Ứng dụng trong ML:** 
+*   Một mô hình đơn giản (ít trọng số lớn, ít kết hợp đặc trưng phức tạp) có khả năng dự báo tốt hơn trên dữ liệu mới so với một mô hình phức tạp đã cố gắng khớp với từng điểm nhiễu của dữ liệu cũ.
+
+### 6. Khi nào dữ liệu dẫn đến Overfitting?
+Tóm lại, mô hình dễ bị Overfitting khi dữ liệu có các đặc điểm sau:
+1.  **Dữ liệu ít nhưng đặc trưng nhiều:** Mô hình có quá nhiều "nút vặn" để khớp với quá ít điểm dữ liệu.
+2.  **Tỷ lệ nhiễu cao:** Nhiều nhãn sai hoặc đặc trưng sai.
+3.  **Dữ liệu không cân bằng hoặc chứa nhiều giá trị duy nhất:** Tạo ra các mối quan hệ giả định do trùng hợp ngẫu nhiên.
+
+---
+
+### Bài học rút ra để học ML:
+*   **Đừng tin vào Training Loss thấp:** Nếu Training Loss cực thấp mà Validation Loss cao, hãy kiểm tra xem bạn có đang sử dụng quá nhiều đặc trưng hiếm hoặc Feature Crosses không.
+*   **Làm sạch dữ liệu là ưu tiên:** Trước khi tăng độ phức tạp của mô hình, hãy dùng kỹ thuật **Scrubbing** để loại bỏ nhiễu.
+*   **Regularization là cứu cánh:** Vì không thể xóa bỏ hoàn toàn nhiễu và các đặc trưng hiếm, chúng ta dùng Regularization để "phạt" những trọng số lớn, buộc mô hình phải ưu tiên những quy luật đơn giản và phổ quát hơn.
+
+---
+
+# Data characteristics (Đặc điểm dữ liệu)
+
+### 1. Định nghĩa và Định dạng Tập dữ liệu (Dataset)
+*   **Dataset:** Là một tập hợp các ví dụ (examples).
+*   **Định dạng:** Thường được lưu trữ dưới dạng bảng (hàng là một ví dụ, cột là đặc trưng hoặc nhãn). Ngoài ra còn có định dạng log files hoặc protocol buffers.
+*   **Nguyên tắc vàng:** Mô hình máy học chỉ tốt ngang bằng với dữ liệu mà nó được huấn luyện.
+
+### 2. Các loại dữ liệu (Types of data)
+Dữ liệu có thể tồn tại ở nhiều dạng:
+*   Dữ liệu số (Numerical) và dữ liệu phân loại (Categorical).
+*   Ngôn ngữ con người (từ, câu, văn bản).
+*   Đa phương tiện (hình ảnh, video, âm thanh).
+*   Đầu ra từ các hệ thống ML khác.
+*   Vector nhúng (Embedding vectors).
+
+### 3. Số lượng dữ liệu (Quantity of data)
+*   **Quy tắc ngón tay cái:** Số lượng ví dụ nên lớn hơn ít nhất 10 đến 100 lần số lượng tham số có thể huấn luyện của mô hình.
+*   **Lợi thế dữ liệu lớn:** Các mô hình đơn giản được huấn luyện trên tập dữ liệu lớn (ít đặc trưng) thường hiệu quả hơn mô hình phức tạp trên tập dữ liệu nhỏ (nhiều đặc trưng).
+*   **Tính linh hoạt:** Tùy vào độ khó của vấn đề mà số lượng cần thiết có thể từ vài chục đến hàng nghìn tỷ ví dụ.
+*   **Mẹo:** Có thể dùng tập dữ liệu nhỏ nếu bạn đang tinh chỉnh (adapting) từ một mô hình đã được huấn luyện trước đó trên dữ liệu lớn có cùng cấu trúc.
+
+### 4. Chất lượng và Độ tin cậy (Quality and Reliability)
+*   **Định nghĩa thực dụng:** Dữ liệu chất lượng cao là dữ liệu giúp mô hình đạt được mục tiêu.
+*   **Độ tin cậy (Reliability):** Là mức độ bạn có thể tin tưởng vào dữ liệu. Ba câu hỏi để đo lường:
+    1. Lỗi nhãn phổ biến đến mức nào (do con người nhầm lẫn)?
+    2. Các đặc trưng có bị nhiễu (noise) không (giá trị chứa sai số, ví dụ: GPS dao động)?
+    3. Dữ liệu đã được lọc đúng cho vấn đề chưa (ví dụ: loại bỏ bot nếu chỉ muốn nghiên cứu hành vi con người)?
+
+### 5. Nguyên nhân gây ra dữ liệu không đáng tin cậy
+*   **Giá trị bị bỏ sót:** Quên nhập liệu.
+*   **Ví dụ trùng lặp:** Lỗi máy chủ tải lên cùng một dữ liệu hai lần.
+*   **Giá trị đặc trưng kém:** Gõ sai số hoặc cảm biến bị hỏng (để nhiệt kế ngoài nắng).
+*   **Nhãn sai:** Gán nhãn nhầm (ví dụ: nhầm cây sồi thành cây phong).
+*   **Các đoạn dữ liệu bị hỏng:** Lỗi mạng hoặc sự cố hệ thống trong một khoảng thời gian nhất định.
+
+### 6. Cách xử lý dữ liệu không đáng tin cậy
+*   **Tự động hóa:** Sử dụng các bài kiểm tra (unit tests) hoặc bảng mã dữ liệu (schema) để gắn cờ các giá trị nằm ngoài phạm vi cho phép.
+*   **Xóa bỏ:** 
+    *   Nếu tập dữ liệu còn đủ lớn, hãy xóa các ví dụ không hoàn chỉnh.
+    *   Nếu một đặc trưng thiếu quá nhiều dữ liệu và không giúp ích nhiều cho mô hình, hãy xóa đặc trưng đó.
+*   **Điền giá trị (Imputation):** Nếu dữ liệu quá ít, cân nhắc việc suy luận để điền vào các giá trị bị thiếu.
+*   **Thử nghiệm:** Nếu không biết nên xóa hay nên điền, hãy tạo hai tập dữ liệu khác nhau để huấn luyện thử và so sánh kết quả mô hình nào tốt hơn.
+
+### 7. Cách xử lý ví dụ không hoàn chỉnh (Incomplete Examples)
+
+Khi tập dữ liệu có những ví dụ bị thiếu một hoặc nhiều giá trị đặc trưng, bạn có hai lựa chọn chính: Xóa bỏ hoặc Điền giá trị.
+
+Lựa chọn A: Xóa bỏ (Deletion)
+
+   + Xóa ví dụ (hàng): Nếu tập dữ liệu của bạn đủ lớn để huấn luyện một mô hình hữu ích, hãy cân nhắc xóa bỏ các ví dụ không hoàn chỉnh.
+
+   + Xóa đặc trưng (cột): Nếu một đặc trưng cụ thể bị thiếu một lượng lớn dữ liệu và đặc trưng đó không đóng góp nhiều cho khả năng dự báo của mô hình, hãy xóa toàn bộ đặc trưng đó khỏi đầu vào.
+
+   + Mẹo: Nếu mô hình hoạt động tốt tương đương khi không có đặc trưng đó, việc xóa bỏ là lựa chọn tối ưu.
+
+Lựa chọn B: Điền giá trị (Imputation)
+
+   + Sử dụng khi bạn không có đủ ví dụ hoàn chỉnh để huấn luyện mô hình.
+
+   + Cách làm: Tự suy luận và điền các giá trị vào những chỗ bị trống (ví dụ: dùng giá trị trung bình, trung vị...).
+
+### 8. Quy tắc đưa ra quyết định
+
+Việc phân biệt giữa một ví dụ "vô dụng" và "hữu ích" thường rất khó khăn. Tài liệu đưa ra lời khuyên:
+
+   + Nếu có đủ dữ liệu: Ưu tiên xóa các ví dụ bị lỗi/thiếu để đảm bảo độ tin cậy.
+
+   + Nếu không chắc chắn:
+
+      - Xây dựng đồng thời hai tập dữ liệu: một tập bằng cách xóa các ví dụ không hoàn chỉnh và tập còn lại bằng cách điền giá trị bị thiếu.
+      - Huấn luyện mô hình trên cả hai tập và so sánh kết quả để xem phương pháp nào cho mô hình tốt hơn.
+
+Nguyên tắc cốt lõi: Việc xóa bỏ các ví dụ vô ích hoặc dư thừa là tốt, nhưng xóa nhầm các ví dụ quan trọng sẽ làm giảm chất lượng mô hình.
+
+---
