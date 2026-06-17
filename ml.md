@@ -1221,56 +1221,6 @@ Mô hình sẽ học một trọng số ($w$) riêng biệt cho từng tổ hợ
 
 ---
 
-# Đặc điểm dữ liệu và Overfitting
-
-Trong Machine Learning, Overfitting (quá khớp) xảy ra khi mô hình học cả **"nhiễu" (noise)** thay vì chỉ học **"tín hiệu" (signal)**. Nội dung này tập trung vào việc nhận diện các loại nhiễu trong dữ liệu khiến mô hình bị "lạc lối".
-
-### 1. Nhiễu trong Nhãn (Noisy Labels)
-Đây là trường hợp các ví dụ trong tập dữ liệu bị gắn nhãn sai lệch so với thực tế.
-*   **Nguyên nhân:** Do lỗi nhập liệu của con người, lỗi hệ thống thu thập, hoặc sự không nhất quán trong định nghĩa nhãn (ví dụ: hai người đánh giá một email là spam theo tiêu chuẩn khác nhau).
-*   **Hậu quả đối với mô hình:** Khi mô hình quá phức tạp, nó sẽ cố gắng tìm ra một quy luật toán học cực kỳ rắc rối để "giải thích" tại sao ví dụ bị sai nhãn đó lại có kết quả như vậy. Thay vì phớt lờ sai số, mô hình lại học nó như một quy luật đúng.
-
-### 2. Nhiễu trong Đặc trưng (Noisy Features)
-Các thông tin đầu vào (features) không chính xác hoặc chứa các giá trị bị lỗi.
-*   **Ví dụ:** Một cảm biến nhiệt độ bị hỏng thỉnh thoảng gửi về giá trị 1000°C trong khi thực tế là 25°C.
-*   **Hậu quả:** Mô hình có thể lầm tưởng rằng những giá trị cực đoan này là dấu hiệu quan trọng để dự báo nhãn. Điều này làm hỏng khả năng khái quát hóa vì mô hình đang dựa vào những dữ liệu sai lệch.
-
-### 3. Các đặc trưng hiếm (Rare Features)
-Đây là một trong những nguyên nhân "tàng hình" gây Overfitting mạnh nhất.
-*   **Khái niệm:** Là những đặc trưng chỉ xuất hiện trong một số lượng rất nhỏ ví dụ (ví dụ: chỉ xuất hiện 1-2 lần trong 1 triệu dòng dữ liệu).
-*   **Sự nguy hiểm:** Khi một đặc trưng cực kỳ hiếm tình cờ đi kèm với một nhãn cụ thể, mô hình sẽ gán cho nó một **trọng số ($w$) rất lớn**.
-    *   *Ví dụ thực tế:* Trong dữ liệu mua sắm, có duy nhất một khách hàng mua "Mũ màu tím" và người này tình cờ là một "VIP". Mô hình có thể học quy luật sai lầm: "Bất cứ ai mua mũ màu tím đều là khách hàng VIP". 
-*   **Kết luận:** Mô hình đang "ghi nhớ" (memorizing) dữ liệu thay vì "học" (learning).
-
-### 4. Kết hợp đặc trưng chứa các tổ hợp hiếm (Rare Feature Crosses)
-Tương tự như đặc trưng hiếm, nhưng xảy ra khi ta nhân các đặc trưng với nhau (Feature Crosses).
-*   **Vấn đề:** Khi bạn kết hợp nhiều đặc trưng, bạn tạo ra các tổ hợp cực kỳ chi tiết. Càng chi tiết thì số lượng ví dụ có tổ hợp đó càng ít.
-*   **Hậu quả:** Bạn càng tạo ra nhiều Feature Crosses, mô hình càng có nhiều cơ hội để "học vẹt" các trường hợp cá biệt. Điều này biến mô hình thành một "cuốn từ điển" ghi nhớ từng dòng dữ liệu thay vì là một công cụ dự báo thông minh.
-
----
-
-### 5. Triết lý Ockham’s Razor (Nguyên lý tối giản)
-Nội dung nhấn mạnh một nguyên lý quan trọng trong ML để đối phó với Overfitting:
-> *"Giữa các lý thuyết có cùng khả năng giải thích một sự việc, lý thuyết nào đơn giản nhất thường là lý thuyết đúng."*
-
-**Ứng dụng trong ML:** 
-*   Một mô hình đơn giản (ít trọng số lớn, ít kết hợp đặc trưng phức tạp) có khả năng dự báo tốt hơn trên dữ liệu mới so với một mô hình phức tạp đã cố gắng khớp với từng điểm nhiễu của dữ liệu cũ.
-
-### 6. Khi nào dữ liệu dẫn đến Overfitting?
-Tóm lại, mô hình dễ bị Overfitting khi dữ liệu có các đặc điểm sau:
-1.  **Dữ liệu ít nhưng đặc trưng nhiều:** Mô hình có quá nhiều "nút vặn" để khớp với quá ít điểm dữ liệu.
-2.  **Tỷ lệ nhiễu cao:** Nhiều nhãn sai hoặc đặc trưng sai.
-3.  **Dữ liệu không cân bằng hoặc chứa nhiều giá trị duy nhất:** Tạo ra các mối quan hệ giả định do trùng hợp ngẫu nhiên.
-
----
-
-### Bài học rút ra để học ML:
-*   **Đừng tin vào Training Loss thấp:** Nếu Training Loss cực thấp mà Validation Loss cao, hãy kiểm tra xem bạn có đang sử dụng quá nhiều đặc trưng hiếm hoặc Feature Crosses không.
-*   **Làm sạch dữ liệu là ưu tiên:** Trước khi tăng độ phức tạp của mô hình, hãy dùng kỹ thuật **Scrubbing** để loại bỏ nhiễu.
-*   **Regularization là cứu cánh:** Vì không thể xóa bỏ hoàn toàn nhiễu và các đặc trưng hiếm, chúng ta dùng Regularization để "phạt" những trọng số lớn, buộc mô hình phải ưu tiên những quy luật đơn giản và phổ quát hơn.
-
----
-
 # Data characteristics (Đặc điểm dữ liệu)
 
 ### 1. Định nghĩa và Định dạng Tập dữ liệu (Dataset)
