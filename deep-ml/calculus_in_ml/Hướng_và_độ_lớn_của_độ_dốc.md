@@ -1,5 +1,7 @@
+# Vector Gradient: Magnitude và Direction
 
 Giả sử ta có vector Gradient $\mathbf{g}$ của hàm số $f$ tại điểm $\mathbf{w}$:
+
 $$\mathbf{g} = \nabla f(\mathbf{w}) = \begin{bmatrix} \frac{\partial f}{\partial w_1} \\ \frac{\partial f}{\partial w_2} \\ \vdots \\ \frac{\partial f}{\partial w_n} \end{bmatrix}$$
 
 ---
@@ -8,12 +10,12 @@ $$\mathbf{g} = \nabla f(\mathbf{w}) = \begin{bmatrix} \frac{\partial f}{\partial
 Đại diện cho **độ dốc** (steepness) của hàm số. Magnitude càng lớn, hàm số thay đổi càng nhanh tại điểm đó.
 
 **Công thức:**
-$$\|\mathbf{g}\|_2 = \sqrt{g_1^2 + g_2^2 + \dots + g_n^2} = \sqrt{\sum_{i=1}^n g_i^2}$$
+$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$
 
 ---
 
 ### 2. Direction of Steepest Ascent (Hướng tăng nhanh nhất)
-Là một **vector đơn vị** (unit vector) chỉ về hướng mà giá trị của hàm số tăng lên nhanh nhất. Trong ML, đây là hướng đi ngược lại với mục tiêu tối ưu hóa Loss.
+Là một **vector đơn vị** (unit vector) chỉ về hướng mà giá trị của hàm số tăng lên nhanh nhất. Trong Machine Learning, đây là hướng đi ngược lại với mục tiêu tối ưu hóa.
 
 **Công thức:**
 $$\mathbf{u}_{\text{ascent}} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
@@ -25,37 +27,39 @@ $$\mathbf{u}_{\text{ascent}} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
 Là hướng mà giá trị hàm số giảm xuống nhanh nhất. Đây là hướng cốt lõi được sử dụng trong thuật toán **Gradient Descent** để cập nhật trọng số nhằm giảm thiểu hàm Loss.
 
 **Công thức:**
-$$\mathbf{u}_{\text{descent}} = -\mathbf{u}_{\text{ascent}} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
+$$\mathbf{u}_{\text{descent}} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
 *(Điều kiện: $\|\mathbf{g}\|_2 \neq 0$)*
 
 ---
 
-### 4. Tổng hợp quy tắc cập nhật trong ML
-Trong Gradient Descent, chúng ta không chỉ dùng hướng mà còn dùng cả độ lớn và tốc độ học ($\eta$):
+### 4. Quy tắc cập nhật trọng số trong ML
+Trong thuật toán Gradient Descent, chúng ta kết hợp cả hướng, độ lớn và tốc độ học ($\eta$):
 
 $$\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} - \eta \cdot \mathbf{g}$$
 
-Nếu phân tích theo hướng và độ lớn (Direction & Magnitude):
-$$\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} + \eta \cdot \underbrace{\|\mathbf{g}\|_2}_{\text{Magnitude}} \cdot \underbrace{\mathbf{u}_{\text{descent}}}_{\text{Direction}}$$
+Nếu phân tích theo **Direction** và **Magnitude**:
+$$\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} + \underbrace{\eta}_{\text{Learning Rate}} \cdot \underbrace{\|\mathbf{g}\|_2}_{\text{Magnitude}} \cdot \underbrace{\mathbf{u}_{\text{descent}}}_{\text{Direction}}$$
 
 ---
 
-### Trường hợp đặc biệt (Zero Vector)
+### Trường hợp đặc biệt: Zero Vector
 Nếu $\mathbf{g} = \mathbf{0}$ (tại điểm cực trị hoặc điểm yên ngựa):
 *   **Magnitude:** $\|\mathbf{g}\|_2 = 0$
-*   **Direction:** Không xác định (thường trả về $\mathbf{0}$ trong lập trình).
-*   **Ý nghĩa:** Mô hình đã hội tụ, không cần cập nhật thêm.
+*   **Direction:** Không xác định (thường trả về vector $\mathbf{0}$ trong lập trình).
+*   **Ý nghĩa:** Mô hình đã hội tụ hoặc đứng yên, không có hướng tăng/giảm nào rõ rệt.
 
 ---
 
-# Magnitude:
-$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$
+### Công thức:
 
-# Steepest Ascent:
-$$\mathbf{u}_{ascent} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
+**Magnitude:**
+`$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$`
 
-# Steepest Descent:
-$$\mathbf{u}_{descent} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
+**Steepest Ascent:**
+`$$\mathbf{u}_{ascent} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$`
+
+**Steepest Descent:**
+`$$\mathbf{u}_{descent} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$`
 
 ---
 
