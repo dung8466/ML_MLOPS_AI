@@ -9,15 +9,33 @@ Ma trận chuyển vị được tạo ra bằng cách hoán đổi hàng và c�
 ### Định nghĩa
 
 Đối với một ma trận $A$, trong đó phần tử $A_{ij}$ nằm ở hàng $i$ và cột $j$:
-$$(A^T)_{ij} = A_{ji}$$
+
+$$
+(A^T)_{ij} = A_{ji}
+$$
 
 ### Ví dụ
 
 **Ma trận gốc $A$ ($2 \times 3$):**
-$$A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix}$$
+
+$$
+A = 
+\begin{pmatrix} 
+1 & 2 & 3 \\ 
+4 & 5 & 6 
+\end{pmatrix}
+$$
 
 **Ma trận chuyển vị $A^T$ ($3 \times 2$):**
-$$A^T = \begin{pmatrix} 1 & 4 \\ 2 & 5 \\ 3 & 6 \end{pmatrix}$$
+
+$$
+A^T = 
+\begin{pmatrix} 
+1 & 4 \\ 
+2 & 5 \\ 
+3 & 6 
+\end{pmatrix}
+$$
 
 ---
 
