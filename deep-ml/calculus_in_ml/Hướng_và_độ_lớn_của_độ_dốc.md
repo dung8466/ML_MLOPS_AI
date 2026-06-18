@@ -2,70 +2,70 @@
 
 Giả sử ta có vector Gradient $\mathbf{g}$ của hàm số $f$ tại điểm $\mathbf{w}$:
 
-$$\mathbf{g} = \nabla f(\mathbf{w}) = \begin{bmatrix} 
-\frac{\partial f}{\partial w_1} \\ 
-\frac{\partial f}{\partial w_2} \\ 
-\vdots \\ 
-\frac{\partial f}{\partial w_n} 
-\end{bmatrix}$$
+$$
+\mathbf{g} = \nabla f(\mathbf{w}) = \begin{bmatrix} \frac{\partial f}{\partial w_1} \\ \frac{\partial f}{\partial w_2} \\ \vdots \\ \frac{\partial f}{\partial w_n} \end{bmatrix}
+$$
+
 ---
 
 ### 1. Magnitude (Độ lớn - L2 Norm)
 Đại diện cho **độ dốc** (steepness) của hàm số. Magnitude càng lớn, hàm số thay đổi càng nhanh tại điểm đó.
 
 **Công thức:**
-$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$
+
+$$
+\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}
+$$
 
 ---
 
 ### 2. Direction of Steepest Ascent (Hướng tăng nhanh nhất)
-Là một **vector đơn vị** (unit vector) chỉ về hướng mà giá trị của hàm số tăng lên nhanh nhất. Trong Machine Learning, đây là hướng đi ngược lại với mục tiêu của thuật toán tối ưu hóa.
+Là một **vector đơn vị** (unit vector) chỉ về hướng mà giá trị của hàm số tăng lên nhanh nhất. Trong Machine Learning, đây là hướng đi ngược lại với mục tiêu của tối ưu hóa.
 
 **Công thức:**
-$$\mathbf{u}_{\text{ascent}} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
+
+$$
+\mathbf{u}_{\text{ascent}} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}
+$$
+
 *(Điều kiện: $\|\mathbf{g}\|_2 \neq 0$)*
 
 ---
 
 ### 3. Descent Direction (Hướng giảm nhanh nhất - Steepest Descent)
-Là hướng mà giá trị hàm số giảm xuống nhanh nhất. Đây là hướng cốt lõi được sử dụng trong thuật toán **Gradient Descent** để cập nhật trọng số nhằm giảm thiểu hàm mất mát.
+Là hướng mà giá trị hàm số giảm xuống nhanh nhất. Đây là hướng cốt lõi được sử dụng trong thuật toán **Gradient Descent** để cập nhật trọng số.
 
 **Công thức:**
-$$\mathbf{u}_{\text{descent}} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
-*(Điều kiện: $\|\mathbf{g}\|_2 \neq 0$)*
+
+$$
+\mathbf{u}_{\text{descent}} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}
+$$
 
 ---
 
 ### 4. Quy tắc cập nhật trọng số trong ML
 Trong thuật toán Gradient Descent, chúng ta kết hợp cả hướng, độ lớn và tốc độ học ($\eta$):
 
-$$\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} - \eta \cdot \mathbf{g}$$
+$$
+\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} - \eta \cdot \mathbf{g}
+$$
 
 Nếu phân tích theo **Direction** và **Magnitude**:
-$$\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} + \underbrace{\eta}_{\text{Learning Rate}} \cdot \underbrace{\|\mathbf{g}\|_2}_{\text{Magnitude}} \cdot \underbrace{\mathbf{u}_{\text{descent}}}_{\text{Direction}}$$
+
+$$
+\mathbf{w}_{\text{new}} = \mathbf{w}_{\text{old}} + \eta \cdot \|\mathbf{g}\|_2 \cdot \mathbf{u}_{\text{descent}}
+$$
 
 ---
 
 ### Trường hợp đặc biệt: Zero Vector
-Nếu $\mathbf{g} = \mathbf{0}$ (tại điểm cực trị hoặc điểm yên ngựa):
+Nếu $\mathbf{g} = \mathbf{0}$ (tại điểm cực trị):
 *   **Magnitude:** $\|\mathbf{g}\|_2 = 0$
-*   **Direction:** Không xác định (thường trả về vector $\mathbf{0}$ trong lập trình).
-*   **Ý nghĩa:** Mô hình đã hội tụ hoặc đứng yên, không có hướng tăng/giảm nào rõ rệt.
+*   **Direction:** Trả về vector $\mathbf{0}$.
+*   **Ý nghĩa:** Mô hình đã hội tụ.
 
 ---
 
-### Công thức Tóm tắt:
-
-**Magnitude:**
-$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$
-
-**Steepest Ascent:**
-$$\mathbf{u}_{ascent} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
-
-**Steepest Descent:**
-$$\mathbf{u}_{descent} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
-
----
 
 ## Code Implementation
 
