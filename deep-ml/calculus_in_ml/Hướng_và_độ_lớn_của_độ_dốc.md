@@ -2,8 +2,12 @@
 
 Giả sử ta có vector Gradient $\mathbf{g}$ của hàm số $f$ tại điểm $\mathbf{w}$:
 
-$$\mathbf{g} = \nabla f(\mathbf{w}) = \begin{bmatrix} \frac{\partial f}{\partial w_1} \\ \frac{\partial f}{\partial w_2} \\ \vdots \\ \frac{\partial f}{\partial w_n} \end{bmatrix}$$
-
+$$\mathbf{g} = \nabla f(\mathbf{w}) = \begin{bmatrix} 
+\frac{\partial f}{\partial w_1} \\ 
+\frac{\partial f}{\partial w_2} \\ 
+\vdots \\ 
+\frac{\partial f}{\partial w_n} 
+\end{bmatrix}$$
 ---
 
 ### 1. Magnitude (Độ lớn - L2 Norm)
