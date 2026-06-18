@@ -18,7 +18,6 @@ $$A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix}$$
 
 **Ma trận chuyển vị $A^T$ ($3 \times 2$):**
 $$A^T = \begin{pmatrix} 1 & 4 \\ 2 & 5 \\ 3 & 6 \end{pmatrix}$$
-
 ---
 
 ### Các tính chất của Ma trận chuyển vị
