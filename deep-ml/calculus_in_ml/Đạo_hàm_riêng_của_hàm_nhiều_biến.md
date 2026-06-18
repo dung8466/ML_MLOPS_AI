@@ -27,7 +27,7 @@ Dưới đây là bảng phân tích đạo hàm riêng cho từng hàm để b�
 
 ---
 
-#Code
+# Code
 
 ```python
 import numpy as np
@@ -77,11 +77,6 @@ def compute_partial_derivatives(func_name: str, point: tuple[float, ...]) -> tup
     else:
         raise ValueError("func_name không hợp lệ.")
 
-# Ví dụ chạy thử:
-# Với poly2d tại điểm (1.0, 2.0):
-# df/dx = 2(1)(2) + 2^2 = 4 + 4 = 8.0
-# df/dy = 1^2 + 2(1)(2) = 1 + 4 = 5.0
-print(compute_partial_derivatives('poly2d', (1.0, 2.0))) # Kết quả: (8.0, 5.0)
 ```
 
 ---
