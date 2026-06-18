@@ -16,47 +16,36 @@ $$f'(x) = \left( \frac{g(x)}{h(x)} \right)' = \frac{g'(x)h(x) - g(x)h'(x)}{[h(x)
 ---
 
 ```python
-def evaluate_polynomial(coeffs: list, x: float) -> float:
-    """Hàm phụ để tính giá trị của đa thức tại điểm x."""
-    res = 0
-    n = len(coeffs)
-    for i, c in enumerate(coeffs):
-        power = n - 1 - i
-        res += c * (x ** power)
-    return res
-
-def derivative_coefficients(coeffs: list) -> list:
-    """Hàm phụ để tìm các hệ số của đa thức đạo hàm."""
-    n = len(coeffs)
-    deriv_coeffs = []
-    for i, c in enumerate(coeffs):
-        power = n - 1 - i
-        if power > 0:
-            deriv_coeffs.append(c * power)
-    # Nếu đa thức gốc là hằng số, đạo hàm là [0]
-    return deriv_coeffs if deriv_coeffs else [0]
-
 def quotient_rule_derivative(g_coeffs: list, h_coeffs: list, x: float) -> float:
-    # 1. Tính giá trị g(x) và h(x)
-    gx = evaluate_polynomial(g_coeffs, x)
-    hx = evaluate_polynomial(h_coeffs, x)
-    
-    # Kiểm tra mẫu số
+    # 1. Tính giá trị g(x) và g'(x)
+    # Với hệ số giảm dần, bậc của phần tử i là p = len - 1 - i
+    gx = 0
+    g_prime_x = 0
+    n_g = len(g_coeffs)
+    for i in range(n_g):
+        p = n_g - 1 - i  # Số mũ hiện tại
+        gx += g_coeffs[i] * (x ** p)
+        if p > 0:
+            g_prime_x += (g_coeffs[i] * p) * (x ** (p - 1))
+
+    # 2. Tính giá trị h(x) và h'(x)
+    hx = 0
+    h_prime_x = 0
+    n_h = len(h_coeffs)
+    for i in range(n_h):
+        p = n_h - 1 - i  # Số mũ hiện tại
+        hx += h_coeffs[i] * (x ** p)
+        if p > 0:
+            h_prime_x += (h_coeffs[i] * p) * (x ** (p - 1))
+
+    # 3. Kiểm tra mẫu số h(x) khác 0
     if hx == 0:
-        raise ValueError("Mẫu số h(x) bằng 0 tại điểm x, đạo hàm không xác định.")
+        return 0.0 # Hoặc xử lý lỗi tùy yêu cầu (ví dụ raise ValueError)
+
+    # 4. Áp dụng quy tắc thương: f'(x) = (g'h - gh') / h^2
+    result = (g_prime_x * hx - gx * h_prime_x) / (hx ** 2)
     
-    # 2. Tính giá trị g'(x) và h'(x)
-    g_prime_coeffs = derivative_coefficients(g_coeffs)
-    h_prime_coeffs = derivative_coefficients(h_coeffs)
-    
-    g_prime_x = evaluate_polynomial(g_prime_coeffs, x)
-    h_prime_x = evaluate_polynomial(h_prime_coeffs, x)
-    
-    # 3. Áp dụng công thức quy tắc thương
-    # f'(x) = (g'h - gh') / h^2
-    f_prime_x = (g_prime_x * hx - gx * h_prime_x) / (hx ** 2)
-    
-    return float(f_prime_x)
+    return float(result)
 ```
 
 ---
