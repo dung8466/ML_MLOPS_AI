@@ -10,7 +10,7 @@ Xét một ma trận $A$ và một vector $v$:
 $$A = \begin{pmatrix} a_{11} & a_{12} & \cdots & a_{1m} \\ a_{21} & a_{22} & \cdots & a_{2m} \\ \vdots & \vdots & \ddots & \vdots \\ a_{n1} & a_{n2} & \cdots & a_{nm} \end{pmatrix}$$
 
 ### Vector $v$ (độ dài $m$):
-$$v = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_m \end{pmatrix}$$
+$$v = \begin{pmatrix} v_1 & v_2 & \cdots & v_m \end{pmatrix}$$
 
 Tích vô hướng $A \cdot v$ tạo ra một vector mới có độ dài $n$:
 $$A \cdot v = \begin{pmatrix} a_{11}v_1 + a_{12}v_2 + \cdots + a_{1m}v_m \\ a_{21}v_1 + a_{22}v_2 + \cdots + a_{2m}v_m \\ \vdots \\ a_{n1}v_1 + a_{n2}v_2 + \cdots + a_{nm}v_m \end{pmatrix}$$
@@ -19,13 +19,13 @@ $$A \cdot v = \begin{pmatrix} a_{11}v_1 + a_{12}v_2 + \cdots + a_{1m}v_m \\ a_{2
 
 ### Yêu cầu then chốt:
 
-Số lượng **cột** của ma trận ($m$) phải bằng **độ dài** của vector ($m$). Nếu điều kiện này không được thỏa mãn, phép toán sẽ không xác định (undefined), và hàm thực thi nên trả về giá trị `-1`.
+Số lượng **cột** của ma trận ($m$) phải bằng **độ dài** của vector ($m$). Nếu điều kiện này không được thỏa mãn, phép toán sẽ không xác định (undefined), và hàm sẽ trả về -1.
 
 ---
 
 # Bài tập
 
-Write a Python function that computes the dot product of a matrix and a vector. The function should return a list representing the resulting vector if the operation is valid, or -1 if the matrix and vector dimensions are incompatible. A matrix (a list of lists) can be dotted with a vector (a list) only if the number of columns in the matrix equals the length of the vector. For example, an n x m matrix requires a vector of length m.
+Write a Python function that computes the dot product of a matrix and a vector. The function should return a list representing the resulting vector if the operation is valid, or -1 if the matrix and vector dimensions are incompatible.
 
 You may assume the input matrix is a valid (non-jagged) list of lists and the vector is a non-empty list.
 
@@ -45,7 +45,7 @@ Reasoning:
 
 # Code
 
-```
+```python
 def matrix_dot_vector(a: list[list[int|float]], b: list[int|float]) -> list[int|float]:
 	# Return a list where each element is the dot product of a row of 'a' with 'b'.
 	# If the number of columns in 'a' does not match the length of 'b', return -1.
