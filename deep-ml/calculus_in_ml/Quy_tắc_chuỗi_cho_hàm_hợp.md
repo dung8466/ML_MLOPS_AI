@@ -3,6 +3,16 @@
 2.  **Tính đạo hàm (Chain Rule):** Tính đạo hàm riêng lẻ của từng hàm và nhân chúng lại với nhau theo công thức: 
     $$(f_n \circ \dots \circ f_1)'(x) = f_n'(f_{n-1}(\dots f_1(x))) \cdot f_{n-1}'(\dots f_1(x)) \cdot \dots \cdot f_1'(x)$$
 
+### Hiểu Toán trước: Quy tắc chuỗi (Chain Rule)
+
+Giả sử ta có hàm hợp $y = f(g(h(x)))$. Đạo hàm của $y$ theo $x$ được tính bằng cách "truy cứu trách nhiệm" từ ngoài vào trong:
+
+$$\frac{dy}{dx} = \underbrace{f'(g(h(x)))}_{\text{Lớp ngoài cùng}} \cdot \underbrace{g'(h(x))}_{\text{Lớp giữa}} \cdot \underbrace{h'(x)}_{\text{Lớp trong cùng}}$$
+
+### Ứng dụng trong ML:
+Đây chính là nền tảng của thuật toán **Backpropagation** (Lan truyền ngược) trong Neural Networks. Khi bạn tính Gradient để cập nhật trọng số, máy tính sẽ thực hiện chính xác quy trình này nhưng theo chiều ngược lại để tiết kiệm chi phí tính toán.
+
+
 ### Triển khai Code
 
 ```python
@@ -48,27 +58,11 @@ def compute_chain_rule_gradient(functions: list[str], x: float) -> float:
         gradient *= local_derivative
 
     return float(gradient)
-
-# Ví dụ chạy thử:
-# ['sin', 'square'] tại x = 2 tương đương sin(x²)
-# Đạo hàm: cos(x²) * 2x
-# Tại x = 2: cos(4) * 4
-print(compute_chain_rule_gradient(['sin', 'square'], 2.0))
-# Kết quả: ~ -2.6145
 ```
 
 ---
-
-### Hiểu Toán trước: Quy tắc chuỗi (Chain Rule)
-
-Giả sử ta có hàm hợp $y = f(g(h(x)))$. Đạo hàm của $y$ theo $x$ được tính bằng cách "truy cứu trách nhiệm" từ ngoài vào trong:
-
-$$\frac{dy}{dx} = \underbrace{f'(g(h(x)))}_{\text{Lớp ngoài cùng}} \cdot \underbrace{g'(h(x))}_{\text{Lớp giữa}} \cdot \underbrace{h'(x)}_{\text{Lớp trong cùng}}$$
 
 **Tại sao logic code lại như vậy?**
 1.  **`reversed(functions)`**: Vì đề bài nói hàm được áp dụng từ phải sang trái, nên phần tử cuối cùng của list là hàm tiếp xúc với $x$ đầu tiên ($h(x)$).
 2.  **`inputs` list**: Để tính $f'(u)$, bạn cần biết $u$ là bao nhiêu. $u$ chính là kết quả của các hàm phía trước nó. Đó là lý do ta cần bước Forward Pass.
 3.  **Nhân dồn (`gradient *= ...`)**: Đây chính là hiện thực hóa của dấu nhân $(\cdot)$ trong công thức toán học.
-
-### Ứng dụng trong ML:
-Đây chính là nền tảng của thuật toán **Backpropagation** (Lan truyền ngược) trong Neural Networks. Khi bạn tính Gradient để cập nhật trọng số, máy tính sẽ thực hiện chính xác quy trình này nhưng theo chiều ngược lại để tiết kiệm chi phí tính toán.
