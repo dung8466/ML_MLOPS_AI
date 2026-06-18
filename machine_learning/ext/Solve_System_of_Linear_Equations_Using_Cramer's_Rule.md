@@ -32,6 +32,7 @@ $$x_i = \frac{\det(A_i)}{\det(A)}$$
 
 ### Ví dụ minh họa
 Cho hệ phương trình:
+
 $$
 A = 
 \begin{bmatrix} 
