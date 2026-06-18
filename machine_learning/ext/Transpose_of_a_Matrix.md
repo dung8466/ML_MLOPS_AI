@@ -69,7 +69,7 @@ The input is a 2×3 matrix. The transpose swaps rows and columns: the first row 
 
 # Code
 
-```
+```python
 def transpose_matrix(a: list[list[int|float]]) -> list[list[int|float]]:
     """
     Transpose a 2D matrix by swapping rows and columns.
@@ -87,7 +87,7 @@ def transpose_matrix(a: list[list[int|float]]) -> list[list[int|float]]:
 
 Dùng numpy
 
-```
+```python
 import numpy as np
 
 def transpose_matrix(a: list[list[int|float]]) -> list[list[int|float]]:
