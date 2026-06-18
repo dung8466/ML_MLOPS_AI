@@ -15,7 +15,7 @@ $$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$
 ---
 
 ### 2. Direction of Steepest Ascent (Hướng tăng nhanh nhất)
-Là một **vector đơn vị** (unit vector) chỉ về hướng mà giá trị của hàm số tăng lên nhanh nhất. Trong Machine Learning, đây là hướng đi ngược lại với mục tiêu tối ưu hóa.
+Là một **vector đơn vị** (unit vector) chỉ về hướng mà giá trị của hàm số tăng lên nhanh nhất. Trong Machine Learning, đây là hướng đi ngược lại với mục tiêu của thuật toán tối ưu hóa.
 
 **Công thức:**
 $$\mathbf{u}_{\text{ascent}} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
@@ -24,7 +24,7 @@ $$\mathbf{u}_{\text{ascent}} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
 ---
 
 ### 3. Descent Direction (Hướng giảm nhanh nhất - Steepest Descent)
-Là hướng mà giá trị hàm số giảm xuống nhanh nhất. Đây là hướng cốt lõi được sử dụng trong thuật toán **Gradient Descent** để cập nhật trọng số nhằm giảm thiểu hàm Loss.
+Là hướng mà giá trị hàm số giảm xuống nhanh nhất. Đây là hướng cốt lõi được sử dụng trong thuật toán **Gradient Descent** để cập nhật trọng số nhằm giảm thiểu hàm mất mát.
 
 **Công thức:**
 $$\mathbf{u}_{\text{descent}} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
@@ -50,18 +50,20 @@ Nếu $\mathbf{g} = \mathbf{0}$ (tại điểm cực trị hoặc điểm yên n
 
 ---
 
-### Công thức:
+### Công thức Tóm tắt:
 
 **Magnitude:**
-`$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$`
+$$\|\mathbf{g}\|_2 = \sqrt{\sum_{i=1}^n g_i^2}$$
 
 **Steepest Ascent:**
-`$$\mathbf{u}_{ascent} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$`
+$$\mathbf{u}_{ascent} = \frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
 
 **Steepest Descent:**
-`$$\mathbf{u}_{descent} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$`
+$$\mathbf{u}_{descent} = -\frac{\mathbf{g}}{\|\mathbf{g}\|_2}$$
 
 ---
+
+## Code Implementation
 
 ```python
 import numpy as np
