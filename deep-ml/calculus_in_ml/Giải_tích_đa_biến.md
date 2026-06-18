@@ -57,3 +57,39 @@ Dùng để xấp xỉ một hàm số phức tạp bằng một hàm đa thức
 2.  **Backpropagation:** Dùng Chain Rule để tính toán sự thay đổi cần thiết cho từng nơ-ron.
 3.  **Optimization:** Dùng Hessian để hiểu về độ dốc và độ cong, giúp tránh các vùng phẳng hoặc điểm yên ngựa.
 
+---
+
+What is the directional derivative of f(x, y) = x + y at (0, 0) in direction u = (1, 0)?
+
+Để tìm đạo hàm theo hướng của hàm số $f(x, y) = x + y$ tại điểm $(0, 0)$ theo hướng $\mathbf{u} = (1, 0)$, chúng ta thực hiện theo các bước sau:
+
+### 1. Xác định công thức
+Đạo hàm theo hướng $D_{\mathbf{u}}f$ được tính bằng tích vô hướng của vector Gradient $\nabla f$ và vector đơn vị $\mathbf{u}$:
+$$D_{\mathbf{u}}f = \nabla f \cdot \mathbf{u}$$
+
+### 2. Kiểm tra xem $\mathbf{u}$ có phải là vector đơn vị không
+Vector $\mathbf{u} = (1, 0)$ có độ lớn (mô-đun) là:
+$$\|\mathbf{u}\| = \sqrt{1^2 + 0^2} = 1$$
+Vì độ lớn bằng 1, nên đây đã là một vector đơn vị.
+
+### 3. Tìm vector Gradient $\nabla f$
+Gradient là một vector chứa các đạo hàm riêng của hàm số:
+*   Đạo hàm riêng theo $x$: $f_x = \frac{\partial}{\partial x}(x + y) = 1$
+*   Đạo hàm riêng theo $y$: $f_y = \frac{\partial}{\partial y}(x + y) = 1$
+
+Do đó, vector Gradient là:
+$$\nabla f = (1, 1)$$
+
+### 4. Tính giá trị Gradient tại điểm (0, 0)
+Trong trường hợp cụ thể này, Gradient là một hằng số và không phụ thuộc vào vị trí của điểm:
+$$\nabla f(0, 0) = (1, 1)$$
+
+### 5. Tính tích vô hướng
+$$D_{\mathbf{u}}f(0, 0) = \nabla f(0, 0) \cdot \mathbf{u}$$
+$$D_{\mathbf{u}}f(0, 0) = (1, 1) \cdot (1, 0)$$
+$$D_{\mathbf{u}}f(0, 0) = (1 \times 1) + (1 \times 0) = 1$$
+
+---
+
+**Kết quả cuối cùng:**
+Đạo hàm theo hướng là **1**.
