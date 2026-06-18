@@ -4,7 +4,7 @@
 
 # Chuyển vị của một Ma trận (Transpose of a Matrix)
 
-Ma trận chuyển vị được tạo ra bằng cách hoán đổi hàng và cột của nó. Nếu $A$ là một ma trận kích thước $m \times n$, thì ma trận chuyển vị của nó, ký hiệu là $A^T$, sẽ có kích thước $n \times m$.
+Ma trận chuyển vị được tạo ra bằng cách hoán đổi hàng và cột của nó. Nếu $A$ là một ma trận kích thước $m \times n$, thì ma trận chuyển vị của nó, ký hiệu là $A^T$, là một ma trận kích thước $n \times m$.
 
 ### Định nghĩa
 
@@ -52,7 +52,8 @@ Sử dụng hàm `zip(*matrix)` là một cách viết đặc trưng (Pythonic) 
 
 # Bài tập
 
-Write a Python function that computes the transpose of a given 2D matrix. The transpose of a matrix is formed by turning its rows into columns and columns into rows. For an mÃn matrix, the transpose will be an nÃm matrix.
+Write a Python function that computes the transpose of a given 2D matrix. The transpose of a matrix is formed by turning its rows into columns and columns into rows. For an m×n matrix, the transposed matrix will have dimensions n×m.
+
 Example:
 
 Input:
