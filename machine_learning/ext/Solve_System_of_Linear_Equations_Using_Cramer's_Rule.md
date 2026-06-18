@@ -38,8 +38,10 @@ A =
 2 & -1 & 3 \\ 
 4 & 2 & 1 \\ 
 -6 & 1 & -2 
-\end{bmatrix}, 
+\end{bmatrix}
+$$
 
+$$
 b = 
 \begin{bmatrix} 
 5 \\ 
