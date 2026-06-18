@@ -4,7 +4,7 @@
 
 # Chuyển vị của một Ma trận (Transpose of a Matrix)
 
-Ma trận chuyển vị được tạo ra bằng cách hoán đổi hàng và cột của nó. Nếu $A$ là một ma trận kích thước $m \times n$, thì ma trận chuyển vị của nó, ký hiệu là $A^T$, là một ma trận kích thước $n \times m$.
+Ma trận chuyển vị được tạo ra bằng cách hoán đổi hàng và cột của nó. Nếu $A$ là một ma trận kích thước $m \times n$, thì ma trận chuyển vị của nó, ký hiệu là $A^T$ hoặc $A'$, là một ma trận kích thước $n \times m$.
 
 ### Định nghĩa
 
@@ -17,9 +17,7 @@ $$(A^T)_{ij} = A_{ji}$$
 $$A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix}$$
 
 **Ma trận chuyển vị $A^T$ ($3 \times 2$):**
-$$A^T = \begin{pmatrix} 1 & 4 \\
-2 & 5 \\
-3 & 6 \end{pmatrix}$$
+$$A^T = \begin{pmatrix} 1 & 4 \\ 2 & 5 \\ 3 & 6 \end{pmatrix}$$
 
 ---
 
