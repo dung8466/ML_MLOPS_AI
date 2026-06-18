@@ -75,9 +75,8 @@ def compute_partial_derivatives(func_name: str, point: tuple[float, ...]) -> tup
         return (float(df_dx), float(df_dy))
 
     else:
-        raise ValueError("func_name không hợp lệ.")
-
+        return -1
 ```
 
----
+
 
