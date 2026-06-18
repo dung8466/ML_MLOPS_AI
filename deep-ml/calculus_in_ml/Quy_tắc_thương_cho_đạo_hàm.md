@@ -13,6 +13,8 @@ $$f'(x) = \left( \frac{g(x)}{h(x)} \right)' = \frac{g'(x)h(x) - g(x)h'(x)}{[h(x)
 3.  **Áp dụng công thức**: Ráp các giá trị vừa tính được vào công thức quy tắc thương.
 4.  **Lưu ý**: Nếu $h(x) = 0$, đạo hàm không xác định (lỗi chia cho 0).
 
+=> f'(x) = (g'h - gh') / h^2
+
 ---
 
 ```python
