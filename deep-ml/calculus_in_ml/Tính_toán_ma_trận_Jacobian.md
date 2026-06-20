@@ -50,15 +50,6 @@ def jacobian_matrix(f, x: list[float], h: float = 1e-5) -> list[list[float]]:
         jacobian[:, j] = (f_x_plus_h - f_x) / h
         
     return jacobian.tolist()
-
-# Ví dụ chạy thử:
-# Hàm f(x, y) = [x^2 + y, y^2 - x]
-# Jacobian lý thuyết: [[2x, 1], [-1, 2y]]
-# Tại (1, 2) -> [[2, 1], [-1, 4]]
-def my_func(v):
-    return [v[0]**2 + v[1], v[1]**2 - v[0]]
-
-print(jacobian_matrix(my_func, [1.0, 2.0]))
 ```
 
 ---
